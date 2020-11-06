@@ -1,8 +1,7 @@
 import 'dart:math';
-
 import 'package:chateko_purse_admin/services/auth_api/auth_api.dart';
-import 'package:chateko_purse_admin/ui/page/widget/button.dart';
-import 'package:chateko_purse_admin/ui/page/widget/snacks.dart';
+import 'package:chateko_purse_admin/ui/views/widget/button.dart';
+import 'package:chateko_purse_admin/ui/views/widget/snacks.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 

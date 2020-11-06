@@ -1,3 +1,4 @@
+import 'package:chateko_purse_admin/view_models/theme_view_model/theme_model.dart';
 import 'package:flutter/material.dart';
 
 enum ButtonState { Initial, Loading, Done }
@@ -29,12 +30,12 @@ ButtonTheme raisedButtonAcrossApp(BuildContext context,
     {String title, Color textColor, Function() onTap, Color color}) {
   return ButtonTheme(
     height: 45,
-    buttonColor: primaryButtonColor,
+    buttonColor: primaryColor,
     child: RaisedButton(
       elevation: 0,
       onPressed: onTap,
       color: color,
-      textColor: white,
+      textColor: Colors.white,
       child: Text(title),
       shape: StadiumBorder(),
     ),

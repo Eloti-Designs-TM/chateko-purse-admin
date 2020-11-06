@@ -1,14 +1,9 @@
 import 'dart:math';
-import 'package:chateko_purse_admin/models/bank_details/bank_details.dart';
 import 'package:chateko_purse_admin/services/auth_api/auth_api.dart';
 import 'package:chateko_purse_admin/services/invest_api/invest_api.dart';
-import 'package:chateko_purse_admin/ui/page/widget/button.dart';
-import 'package:chateko_purse_admin/ui/page/widget/custom_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
 
 class InvestViewModel with ChangeNotifier {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
