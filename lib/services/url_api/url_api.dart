@@ -1,13 +1,7 @@
 import 'package:flutter/foundation.dart';
-// import 'package:maps_launcher/maps_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class OpenUrls with ChangeNotifier {
-  // openMap(String mapAddr) {
-  //   MapsLauncher.launchQuery(mapAddr);
-  // }
-  
-
+class UrlsApi with ChangeNotifier {
   Future<void> launchEmail(String emailUrl) async {
     if (await canLaunch("mailto:$emailUrl")) {
       await launch("mailto:$emailUrl");
