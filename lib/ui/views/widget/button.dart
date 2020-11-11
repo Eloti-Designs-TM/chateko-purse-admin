@@ -80,20 +80,25 @@ flatButtonWithIconWid(
   );
 }
 
-Widget circleButton({IconData icon, Function onPressed, text}) {
+Widget circleButton(
+    {IconData icon, Function onPressed, text, Color color, double size}) {
   return Column(
     children: [
       MaterialButton(
         onPressed: onPressed,
-        textColor: Colors.black,
-        child: Icon(icon, size: 20),
-        padding: EdgeInsets.all(10),
+        textColor: color ?? Colors.black,
+        child: Icon(icon, size: size ?? 20),
+        padding: EdgeInsets.all(size ?? 10),
         shape: CircleBorder(
             side: BorderSide(
-          color: Colors.black,
+          color: color ?? Colors.black,
         )),
       ),
-      Text(text),
+      SizedBox(height: 5),
+      Text(
+        text,
+        style: TextStyle(color: color ?? Colors.black),
+      ),
     ],
   );
 }

@@ -177,31 +177,16 @@ class TopWriteUp extends StatelessWidget {
       textAlign: TextAlign.center,
       text: TextSpan(children: [
         TextSpan(
-          text: '${authApi.currentFirebase == null ? '' : "Welcome"}',
+          text: 'Admin\n',
           style: TextStyle(
-              fontSize: authApi.currentFirebase == null ? 5 : 30,
-              color: Colors.white,
-              fontWeight: FontWeight.w700),
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[200]),
         ),
         TextSpan(
-          text:
-              '\n${authApi.currentFirebase == null ? 'Not a registered user yet?\n' : user.fullName}',
+          text: '${user.fullName}',
           style: TextStyle(fontSize: 14, color: Colors.grey[200]),
         ),
-        authApi.currentFirebase == null
-            ? WidgetSpan(
-                child: FlatButton(
-                textColor: Colors.white,
-                child: Text(
-                  'SignUp or Login',
-                  style: TextStyle(fontSize: 18, color: Colors.grey[200]),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      fullscreenDialog: true, builder: (_) => SignUpLogin()));
-                },
-              ))
-            : WidgetSpan(child: Container()),
       ]),
     );
   }

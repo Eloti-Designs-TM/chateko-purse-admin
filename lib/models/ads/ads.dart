@@ -10,7 +10,7 @@ class Ads {
   factory Ads.fromDoc(DocumentSnapshot doc) {
     var data = doc.data();
     return Ads(
-      adsID: data['adsID'],
+      adsID: doc.id,
       title: data['title'],
       description: data['description'],
       imageUrl: data['imageUrl'],

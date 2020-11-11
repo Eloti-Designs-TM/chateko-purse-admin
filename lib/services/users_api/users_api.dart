@@ -22,11 +22,8 @@ class UserApi with ChangeNotifier {
     notifyListeners();
   }
 
-  getCurrentUser(context, {String userID}) async {
-    user = Users();
-    DocumentSnapshot documents = await usersRef.doc(userID).get();
-    user = Users.fromDoc(documents);
-    notifyListeners();
+  Stream<DocumentSnapshot> getCurrentUser({String userID}) async* {
+    yield* usersRef.doc(userID).snapshots();
   }
 
   int userCount = 0;

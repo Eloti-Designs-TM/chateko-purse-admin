@@ -13,11 +13,15 @@ class Investment {
   String status;
   String duration;
   String timeCreated;
+  bool isFirstTime;
+  bool isRead;
 
   Investment(
       {this.accountName,
       this.accountNumber,
       this.userID,
+      this.isFirstTime,
+      this.isRead,
       this.bankName,
       this.id,
       this.status,
@@ -39,6 +43,8 @@ class Investment {
       accountName: data['accountName'],
       accountNumber: data['accountNumber'],
       duration: data['duration'],
+      isRead: data['isRead'],
+      isFirstTime: data['isFirstTime'],
       timeCreated: data['timeCreated'],
     );
   }
@@ -50,6 +56,8 @@ class Investment {
     data['userID'] = userID;
     data['referrarCode'] = referrarCode;
     data['unit'] = unit;
+    data['isFirstTime'] = isFirstTime;
+
     data['totalAmount'] = totalAmount;
     data['bankName'] = bankName;
     data['accountName'] = accountName;

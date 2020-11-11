@@ -11,7 +11,7 @@ class ThemeModel extends BaseViewModel {
       buttonColor: Colors.pink,
       scaffoldBackgroundColor: Colors.white,
       fontFamily: 'Poppins-Regular',
-      appBarTheme: AppBarTheme(elevation: 0, color: Colors.transparent));
+      appBarTheme: AppBarTheme(elevation: 0, color: primaryColor));
 }
 
 Color primaryColor = Colors.pink[600];

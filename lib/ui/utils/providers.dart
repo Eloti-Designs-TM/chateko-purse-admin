@@ -1,3 +1,5 @@
+import 'package:chateko_purse_admin/services/invest_api/invest_api.dart';
+import 'package:chateko_purse_admin/services/users_api/users_api.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:chateko_purse_admin/services/auth_api/auth_api.dart';
@@ -11,6 +13,8 @@ import '../../././view_models/start_view_model/landing_view_model/start_view_mod
 
 List<SingleChildWidget> providers = [
   ChangeNotifierProvider.value(value: AuthApi()),
+  ChangeNotifierProvider.value(value: UserApi()),
+  ChangeNotifierProvider.value(value: InvestApi()),
   ChangeNotifierProvider.value(value: StartPageViewModel()),
   ChangeNotifierProvider.value(value: SliderViewModel()),
   ChangeNotifierProvider.value(value: SignUpViewModel()),

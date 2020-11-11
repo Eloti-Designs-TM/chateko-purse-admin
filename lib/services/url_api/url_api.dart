@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class UrlsApi with ChangeNotifier {
-  Future<void> launchEmail(String emailUrl) async {
+class UrlsApi {
+  static Future<void> launchEmail(String emailUrl) async {
     if (await canLaunch("mailto:$emailUrl")) {
       await launch("mailto:$emailUrl");
     } else {
@@ -10,7 +10,7 @@ class UrlsApi with ChangeNotifier {
     }
   }
 
-  Future<void> makePhoneCall(String url) async {
+  static Future<void> makePhoneCall(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -18,7 +18,7 @@ class UrlsApi with ChangeNotifier {
     }
   }
 
-  Future<void> openUrls(String url) async {
+  static Future<void> openUrls(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {

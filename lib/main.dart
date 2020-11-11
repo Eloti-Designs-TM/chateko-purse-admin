@@ -1,4 +1,5 @@
 import 'package:chateko_purse_admin/ui/utils/get_it.dart';
+import 'package:chateko_purse_admin/ui/utils/providers.dart';
 import 'package:chateko_purse_admin/ui/views/start_view/start_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,9 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(value: ThemeModel()),
-      ],
+      providers: providers,
       child: Builder(builder: (context) {
         return Consumer<ThemeModel>(builder: (context, model, chi) {
           return MaterialApp(

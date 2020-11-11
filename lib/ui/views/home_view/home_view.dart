@@ -1,6 +1,8 @@
 import 'package:chateko_purse_admin/services/auth_api/auth_api.dart';
 import 'package:chateko_purse_admin/ui/views/home_view/widget/top_bar.dart';
-import 'package:chateko_purse_admin/ui/views/widget/ads.dart';
+import 'package:chateko_purse_admin/ui/views/investment/investment.dart';
+import 'package:chateko_purse_admin/ui/views/manage_user/manage_user_page.dart';
+import 'package:chateko_purse_admin/ui/views/ads_view/ads.dart';
 import 'package:chateko_purse_admin/ui/views/widget/custom_effect.dart';
 import 'package:chateko_purse_admin/view_models/detail_view_model/detail_view_model.dart';
 import 'package:flutter/material.dart';
@@ -20,19 +22,25 @@ class HomeView extends StatelessWidget {
     Menu(
       id: '0',
       title: 'Manage User',
-      icon: Icons.monetization_on,
+      icon: Icons.people,
       state: DetailState.InvestNow,
     ),
     Menu(
       id: '1',
-      title: 'Manage Packages',
-      icon: Icons.military_tech,
+      title: 'Manage Investment',
+      icon: Icons.account_balance,
       state: DetailState.BonusEarnin,
     ),
     Menu(
       id: '2',
       title: 'Manage Bonus',
-      icon: Icons.history,
+      icon: Icons.military_tech,
+      state: DetailState.InvestHistory,
+    ),
+    Menu(
+      id: '2',
+      title: 'Others',
+      icon: Icons.military_tech,
       state: DetailState.InvestHistory,
     ),
   ];
@@ -90,16 +98,20 @@ class HomeView extends StatelessWidget {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(15),
                       onTap: () async {
+                        if (_menu[i].title == 'Manage User') {
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => Investments()));
+                        }
                         // if (authApi.currentFirebase == null) {
                         //   Navigator.of(context).pushReplacement(
                         //       MaterialPageRoute(
                         //           fullscreenDialog: true,
                         //           builder: (_) => SignUpLogin()));
                         // } else {
-                        //   Navigator.of(context).push(MaterialPageRoute(
-                        //       builder: (_) => DetailView(
-                        //           title: _menu[i].title,
-                        //           state: _menu[i].state)));
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //     builder: (_) => DetailView(
+                        //         title: _menu[i].title,
+                        //         state: _menu[i].state)));
                         // }
                       },
                       child: Container(

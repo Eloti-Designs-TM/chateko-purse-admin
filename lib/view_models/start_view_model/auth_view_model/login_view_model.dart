@@ -1,6 +1,7 @@
 import 'package:chateko_purse_admin/services/auth_api/auth_api.dart';
 import 'package:chateko_purse_admin/ui/views/widget/button.dart';
 import 'package:chateko_purse_admin/ui/views/widget/snacks.dart';
+import 'package:chateko_purse_admin/ui/views/home_view/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import '../../base_view_model.dart';
@@ -72,8 +73,8 @@ class LoginViewModel extends BaseViewModel with AuthViewModel {
 
         await Future.delayed(Duration(seconds: 2));
 
-        // await Navigator.of(context)
-        //     .pushReplacement(MaterialPageRoute(builder: (_) => HomeView()));
+        await Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (_) => HomeView()));
         notifyListeners();
       } catch (e) {
         showSnackbarFailed(context,

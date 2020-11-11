@@ -1,11 +1,10 @@
-import 'package:chateko_purse_admin/services/auth_api/auth_api.dart';
-import 'package:chateko_purse_admin/ui/image_assets/images_assets.dart';
-import 'package:chateko_purse_admin/view_models/start_view_model/auth_view_model/sign_up_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'auth_page/signup_login_views.dart';
+import '../../views/home_view/home_view.dart';
+import 'package:chateko_purse_admin/services/auth_api/auth_api.dart';
+import 'package:chateko_purse_admin/ui/image_assets/images_assets.dart';
 
 class StartView extends StatefulWidget {
   @override
@@ -37,7 +36,7 @@ class _StartViewState extends State<StartView> {
       );
       await Future.delayed(Duration(seconds: 2));
       await Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (_) => null()));
+          .pushReplacement(MaterialPageRoute(builder: (_) => HomeView()));
     }
   }
 

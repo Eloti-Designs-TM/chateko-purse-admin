@@ -7,30 +7,37 @@ import 'package:get_it/get_it.dart';
 class InvestApi with ChangeNotifier {
   var investRef = FirebaseFirestore.instance.collection('investments');
   var bankRef = FirebaseFirestore.instance.collection('bank_detial');
+  var referralSystem = FirebaseFirestore.instance.collection('refer_system');
+
+  InvestApi() {
+    getAllInvestmentFromFirestore();
+    print('called');
+  }
+
+  getRefferral(String id, Map<String, dynamic> doc) async {
+    await referralSystem.doc(id).update(doc);
+  }
 
   Investment user;
-  Stream<QuerySnapshot> resultFromUserColloection;
+  Stream<QuerySnapshot> investResult;
   TextEditingController searchController = TextEditingController();
 
   getAllInvestmentFromFirestore() {
     final data = investRef.snapshots();
-    resultFromUserColloection = data;
+    investResult = data;
     notifyListeners();
   }
 
   handleSearch(String query) async {
     Stream<QuerySnapshot> search =
         investRef.where('id', isEqualTo: query).snapshots();
-    resultFromUserColloection = search;
+    investResult = search;
     print(search);
     notifyListeners();
   }
 
-  getCurrentInvestment(context, {String userID}) async {
-    user = Investment();
-    DocumentSnapshot documents = await investRef.doc(userID).get();
-    user = Investment.fromDoc(documents);
-    notifyListeners();
+  Stream<DocumentSnapshot> getCurrentInvestment(String id) async* {
+    yield* investRef.doc(id).snapshots();
   }
 
   var authApi = GetIt.I.get<AuthApi>();
@@ -41,5 +48,15 @@ class InvestApi with ChangeNotifier {
 
   Future<QuerySnapshot> getBankDetial() async {
     return await bankRef.get();
+  }
+
+  updateInvestmentStatus(String id, Map<String, dynamic> doc) async {
+    await investRef.doc(id).update(doc);
+  }
+
+  isCardClick(String id) async {
+    await investRef.doc(id).update({
+      'isRead': false,
+    });
   }
 }
