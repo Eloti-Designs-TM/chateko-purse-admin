@@ -8,7 +8,9 @@ import 'package:chateko_purse_admin/ui/views/widget/alert_dialog.dart';
 import 'package:chateko_purse_admin/ui/views/widget/button.dart';
 import 'package:chateko_purse_admin/ui/views/widget/custom_pageview.dart';
 import 'package:chateko_purse_admin/ui/views/widget/slide_dots.dart';
+import 'package:chateko_purse_admin/ui/views/widget/text_field_wid.dart';
 import 'package:chateko_purse_admin/view_models/ads_view_model.dart/ads_view_model.dart';
+import 'package:chateko_purse_admin/view_models/start_view_model/auth_view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -100,38 +102,50 @@ class UploadAds extends StatelessWidget {
     return AdsInjector(
       child: Consumer<AdsViewModel>(
         builder: (context, ads, child) => Scaffold(
-          backgroundColor: Colors.black,
           appBar: AppBar(
             title: Text('Upload Ads'),
-            actions: [
-              FlatButton.icon(
-                label: Text('Upload'),
-                textColor: Colors.white,
-                icon: Icon(Icons.upload_file),
-                onPressed: () => ads.uplaodAds(context),
-              ),
-            ],
           ),
-          body: Center(
+          body: SingleChildScrollView(
+            child: Form(
+              key: ads.formKey,
               child: Container(
-            height: MediaQuery.of(context).size.height / 1.5,
-            width: MediaQuery.of(context).size.width,
-            child: ads.imagefile != null
-                ? Image.file(ads.imagefile)
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      circleButton(
-                          color: Colors.white,
-                          icon: Icons.add_a_photo,
-                          size: 30,
-                          text: 'Add Image',
-                          onPressed: () {
-                            selectImageForAds(context);
-                          }),
-                    ],
-                  ),
-          )),
+                padding: const EdgeInsets.all(16),
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  children: [
+                    ads.imagefile != null
+                        ? Image.file(ads.imagefile)
+                        : circleButton(
+                            color: Colors.grey[600],
+                            icon: Icons.add_a_photo,
+                            size: 30,
+                            text: 'Add Image',
+                            onPressed: () {
+                              selectImageForAds(context);
+                            }),
+                    SizedBox(height: 20),
+                    TextFieldWidRounded(
+                      title: 'Link Url',
+                      validator: AuthViewModel.validateLink,
+                      controller: ads.linkUrlcontroller,
+                    ),
+                    SizedBox(height: 50),
+                    GradiantButton(
+                      isOutline: false,
+                      buttonState: ads.buttonState,
+                      title: 'Upload',
+                      onPressed: ads.imagefile == null
+                          ? null
+                          : () async {
+                              await ads.uplaodAds(context);
+                              Navigator.of(context).pop();
+                            },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );

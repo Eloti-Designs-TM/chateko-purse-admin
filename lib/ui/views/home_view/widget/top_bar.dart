@@ -112,10 +112,6 @@ Click this link to get your 10% monthly.\nhttps://play.google.com/store/apps/det
             child: PopUpButton(title: 'Share', icon: Icons.share),
           ),
           PopupMenuItem(
-              value: PageEnum.Bank,
-              child: PopUpButton(
-                  title: 'Bank Details', icon: Icons.account_balance)),
-          PopupMenuItem(
             value: PageEnum.Policy,
             child: PopUpButton(title: 'Privacy Policy', icon: Icons.security),
           ),

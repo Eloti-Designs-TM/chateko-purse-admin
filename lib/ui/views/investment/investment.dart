@@ -1,4 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chateko_purse_admin/services/url_api/url_api.dart';
+import 'package:chateko_purse_admin/ui/utils/number_to_currency_format.dart';
+import 'package:chateko_purse_admin/ui/views/ads_view/ads.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +12,7 @@ import 'package:chateko_purse_admin/services/users_api/users_api.dart';
 import 'package:chateko_purse_admin/ui/commons/sizes.dart';
 import 'package:chateko_purse_admin/view_models/invest_view_model/invest_view_model.dart';
 
-class Investments extends StatelessWidget {
+class InvestmentsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,8 +124,6 @@ class InvestmentDetails extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               }
-              print(snapshot.data);
-
               final doc = snapshot.data;
               var invest = Investment();
               invest = Investment.fromDoc(doc);
@@ -177,23 +178,21 @@ class InvestmentDetails extends StatelessWidget {
                                   ],
                                 ),
                                 SizedBox(height: 10),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: _text(
-                                          '${user.address == '' ? "No Address Found" : user.address}',
-                                          Icons.place,
-                                          size: 16,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                    FlatButton(
-                                      shape: StadiumBorder(),
-                                      onPressed: () {},
-                                      textColor: Colors.white,
-                                      color: Colors.pink,
-                                      child: Text('Call'),
-                                    ),
-                                  ],
+                                _text(
+                                    '${invest.address == '' ? "No Address Found" : user.address}',
+                                    Icons.place,
+                                    size: 16,
+                                    fontWeight: FontWeight.w400),
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: FlatButton(
+                                    shape: StadiumBorder(),
+                                    onPressed: () => UrlsApi.makePhoneCall(
+                                        'tel:${user.phone}'),
+                                    textColor: Colors.white,
+                                    color: Colors.pink,
+                                    child: Text('Call'),
+                                  ),
                                 ),
                               ],
                             ),
@@ -210,7 +209,6 @@ class InvestmentDetails extends StatelessWidget {
                         SizedBox(height: 5),
                         Material(
                           borderRadius: BorderRadius.circular(8),
-                          elevation: 2,
                           child: Container(
                             padding: const EdgeInsets.all(8),
                             width: MediaQuery.of(context).size.width,
@@ -226,8 +224,27 @@ class InvestmentDetails extends StatelessWidget {
                                 _textInLine(
                                     'Account No:', '${invest.accountNumber}'),
                                 _textInLine('Bank Name:', '${invest.bankName}'),
-                                _textInLine('Time:', '${invest.timeCreated}'),
+                                _textInLine('Time:',
+                                    '${convertTime(invest.timeCreated)}'),
                                 _textInLine('Status:', '${invest.status}'),
+                                _textInLine('Image Proof:', ''),
+                                GestureDetector(
+                                  onTap: () => Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (_) => ImagePreview(
+                                              imageUrl: invest.proveImageUrl))),
+                                  child: AspectRatio(
+                                      aspectRatio: 4 / 2,
+                                      child: CachedNetworkImage(
+                                        imageUrl: invest.proveImageUrl,
+                                        progressIndicatorBuilder:
+                                            (context, url, progress) => Center(
+                                          child: CircularProgressIndicator(
+                                            value: progress.progress,
+                                          ),
+                                        ),
+                                      )),
+                                ),
                               ],
                             ),
                           ),
@@ -244,12 +261,16 @@ class InvestmentDetails extends StatelessWidget {
                                     status: 'pending',
                                     invest: invest);
                               },
-                              textColor: invest.status == 'active'
+                              textColor: invest.status == 'expired'
                                   ? Colors.black
-                                  : Colors.white,
-                              color: invest.status == 'active'
+                                  : (invest.status == 'active'
+                                      ? Colors.black
+                                      : Colors.white),
+                              color: invest.status == 'expired'
                                   ? Colors.grey
-                                  : Colors.red,
+                                  : (invest.status == 'active'
+                                      ? Colors.grey
+                                      : Colors.red),
                               child: Text('Pending'),
                             ),
                             SizedBox(width: 20),
@@ -258,16 +279,38 @@ class InvestmentDetails extends StatelessWidget {
                               onPressed: () {
                                 model.updateStatus(
                                     id: invest.id,
+                                    user: user,
                                     status: 'active',
                                     invest: invest);
                               },
-                              textColor: invest.status == 'active'
+                              textColor: invest.status == 'expired'
+                                  ? Colors.black
+                                  : (invest.status == 'active'
+                                      ? Colors.white
+                                      : Colors.black),
+                              color: invest.status == 'expired'
+                                  ? Colors.grey
+                                  : (invest.status == 'active'
+                                      ? Colors.green
+                                      : Colors.grey),
+                              child: Text('Active'),
+                            ),
+                            SizedBox(width: 20),
+                            FlatButton(
+                              shape: StadiumBorder(),
+                              onPressed: () {
+                                model.updateStatus(
+                                    id: invest.id,
+                                    status: 'expired',
+                                    invest: invest);
+                              },
+                              textColor: invest.status == 'expired'
                                   ? Colors.white
                                   : Colors.black,
-                              color: invest.status == 'active'
-                                  ? Colors.green
+                              color: invest.status == 'expired'
+                                  ? Colors.red
                                   : Colors.grey,
-                              child: Text('Active'),
+                              child: Text('Expired'),
                             ),
                           ],
                         ),
@@ -318,6 +361,7 @@ class InvestmentDetails extends StatelessWidget {
             SizedBox(width: 10),
             Text(
               '$text',
+              overflow: TextOverflow.fade,
               style: TextStyle(
                 fontSize: size ?? 24,
                 color: Colors.grey[800],

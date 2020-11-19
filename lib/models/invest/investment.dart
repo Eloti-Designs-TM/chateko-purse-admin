@@ -15,6 +15,7 @@ class Investment {
   String timeCreated;
   bool isFirstTime;
   bool isRead;
+  String proveImageUrl;
 
   Investment(
       {this.accountName,
@@ -24,6 +25,7 @@ class Investment {
       this.isRead,
       this.bankName,
       this.id,
+      this.proveImageUrl,
       this.status,
       this.unit,
       this.duration,
@@ -43,6 +45,7 @@ class Investment {
       accountName: data['accountName'],
       accountNumber: data['accountNumber'],
       duration: data['duration'],
+      proveImageUrl: data['proveImageUrl'],
       isRead: data['isRead'],
       isFirstTime: data['isFirstTime'],
       timeCreated: data['timeCreated'],
@@ -57,7 +60,7 @@ class Investment {
     data['referrarCode'] = referrarCode;
     data['unit'] = unit;
     data['isFirstTime'] = isFirstTime;
-
+    data['proveImageUrl'] = proveImageUrl;
     data['totalAmount'] = totalAmount;
     data['bankName'] = bankName;
     data['accountName'] = accountName;

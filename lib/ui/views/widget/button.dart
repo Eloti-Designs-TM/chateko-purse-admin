@@ -82,24 +82,27 @@ flatButtonWithIconWid(
 
 Widget circleButton(
     {IconData icon, Function onPressed, text, Color color, double size}) {
-  return Column(
-    children: [
-      MaterialButton(
-        onPressed: onPressed,
-        textColor: color ?? Colors.black,
-        child: Icon(icon, size: size ?? 20),
-        padding: EdgeInsets.all(size ?? 10),
-        shape: CircleBorder(
-            side: BorderSide(
-          color: color ?? Colors.black,
-        )),
-      ),
-      SizedBox(height: 5),
-      Text(
-        text,
-        style: TextStyle(color: color ?? Colors.black),
-      ),
-    ],
+  return GestureDetector(
+    onTap: onPressed,
+    child: Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: color ?? Colors.black,
+              )),
+          child: Center(child: Icon(icon, size: size ?? 20)),
+          padding: EdgeInsets.all(size ?? 10),
+          margin: EdgeInsets.all(size ?? 4),
+        ),
+        SizedBox(height: 3),
+        Text(
+          text,
+          style: TextStyle(color: color ?? Colors.black),
+        ),
+      ],
+    ),
   );
 }
 

@@ -15,6 +15,7 @@ class Users {
   double serviceValues;
   String password;
   String activateRefarral;
+  String paidFirstInvestment;
 
   Users(
       {this.firstName,
@@ -28,6 +29,7 @@ class Users {
       this.phone,
       this.address,
       this.serviceValues,
+      this.paidFirstInvestment,
       this.password,
       this.imageUrl});
 
@@ -47,6 +49,7 @@ class Users {
       password: data['password'],
       activateRefarral: data['activateRefarral'],
       serviceValues: data['serviceValue'],
+      paidFirstInvestment: data['paidFirstInvestment'],
     );
   }
 

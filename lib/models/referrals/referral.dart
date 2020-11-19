@@ -32,8 +32,12 @@ class ReferSystem {
   Map<String, dynamic> toMap({
     @required int pedingPayment,
     @required int pendingReferralCount,
+    @required int activePayment,
+    @required int activeReferralCount,
   }) {
     final data = Map<String, dynamic>();
+    data['activePayment'] = activePayment;
+    data['activeReferralCount'] = activeReferralCount;
     data['pedingPayment'] = pedingPayment;
     data['pendingReferralCount'] = pendingReferralCount;
     return data;

@@ -10,10 +10,8 @@ class BonusApi extends ChangeNotifier {
   final authApi = GetIt.I.get<AuthApi>();
   var bonusRef = FirebaseFirestore.instance.collection('bonus_request');
 
-  Stream<DocumentSnapshot> getBonus() async* {
-    print('${authApi.users.userID} here');
-    authApi.getCurrentUser(authApi.users.userID);
-    yield* authApi.referRef.doc(authApi.users.referralCode).snapshots();
+  Stream<QuerySnapshot> getBonuses() async* {
+    yield* bonusRef.snapshots();
   }
 
   void requestWithddrawal(context, {String userId}) async {

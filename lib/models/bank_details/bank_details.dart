@@ -1,17 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class BankDetials {
+class BankDetial {
   String bankName;
+  String id;
+
   String accountNumber;
   String accountName;
-  BankDetials({this.bankName, this.accountNumber, this.accountName});
+  BankDetial({this.bankName, this.id, this.accountNumber, this.accountName});
 
-  factory BankDetials.fromDoc(DocumentSnapshot doc) {
+  factory BankDetial.fromDoc(DocumentSnapshot doc) {
     final data = doc.data();
-    return BankDetials(
+    return BankDetial(
+      id: doc.id,
       bankName: data['bank_name'],
       accountNumber: data['account_number'],
       accountName: data['account_name'],
     );
+  }
+
+  Map<String, dynamic> toDoc() {
+    final data = Map<String, dynamic>();
+    data['bank_name'] = bankName;
+    data['account_number'] = accountNumber;
+    data['account_name'] = accountName;
+    return data;
   }
 }

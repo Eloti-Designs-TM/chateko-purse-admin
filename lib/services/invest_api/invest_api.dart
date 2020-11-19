@@ -6,7 +6,6 @@ import 'package:get_it/get_it.dart';
 
 class InvestApi with ChangeNotifier {
   var investRef = FirebaseFirestore.instance.collection('investments');
-  var bankRef = FirebaseFirestore.instance.collection('bank_detial');
   var referralSystem = FirebaseFirestore.instance.collection('refer_system');
 
   InvestApi() {
@@ -44,10 +43,6 @@ class InvestApi with ChangeNotifier {
 
   Stream<QuerySnapshot> getInvests(userID) async* {
     yield* investRef.where('userID', isEqualTo: userID).snapshots();
-  }
-
-  Future<QuerySnapshot> getBankDetial() async {
-    return await bankRef.get();
   }
 
   updateInvestmentStatus(String id, Map<String, dynamic> doc) async {

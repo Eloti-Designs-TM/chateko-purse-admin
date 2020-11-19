@@ -46,5 +46,16 @@ abstract class AuthViewModel {
     return null;
   }
 
+  static String validateLink(String value) {
+    if (value.isEmpty) {
+      return 'Url can\'t be empty';
+    } else if (value.trim().length < 2) {
+      return 'Url too short';
+    } else if (!value.trim().contains('https://')) {
+      return 'Invalid Url';
+    }
+    return null;
+  }
+
   void clearFields() {}
 }

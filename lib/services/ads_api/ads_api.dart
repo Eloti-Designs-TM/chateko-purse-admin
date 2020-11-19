@@ -7,10 +7,11 @@ class AdsApi extends ChangeNotifier {
     return adsRef.snapshots();
   }
 
-  uploadAds(String id, String imageUrl) async {
+  uploadAds(String id, String imageUrl, String linkUrl) async {
     await adsRef.doc().set({
       "id": id,
       "imageUrl": imageUrl,
+      "linkUrl ": linkUrl,
     });
   }
 

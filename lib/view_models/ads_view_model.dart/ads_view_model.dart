@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:chateko_purse_admin/services/ads_api/ads_api.dart';
+import 'package:chateko_purse_admin/ui/views/widget/button.dart';
 import 'package:chateko_purse_admin/ui/views/widget/snacks.dart';
 import 'package:chateko_purse_admin/ui/views/widget/toast.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -14,6 +15,8 @@ import 'package:image/image.dart' as Im;
 class AdsViewModel extends BaseViewModel {
   int pageIndex = 0;
   PageController pageController;
+  TextEditingController linkUrlcontroller = TextEditingController();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   AdsViewModel() {
     pageController = PageController(viewportFraction: 0.8);
@@ -45,13 +48,24 @@ class AdsViewModel extends BaseViewModel {
   String imageUrl;
   // ProfileState profileState = ProfileState.Initial;
 
+  ButtonState buttonState = ButtonState.Initial;
+
   uplaodAds(context) async {
-    await compresImage();
-    await uploadImage(file: imagefile);
-    await adsApi.uploadAds(DateTime.now().toString(), imageUrl);
-    imagefile = null;
-    imageUrl = '';
-    showSnackbarSuccess(context, msg: 'Successfully, added image!');
+    final form = formKey.currentState;
+    buttonState = ButtonState.Loading;
+    if (form.validate()) {
+      buttonState = ButtonState.Loading;
+      await compresImage();
+      await uploadImage(file: imagefile);
+      await adsApi.uploadAds(
+          DateTime.now().toString(), imageUrl, linkUrlcontroller.text);
+      imagefile = null;
+      imageUrl = '';
+      buttonState = ButtonState.Initial;
+      notifyListeners();
+      linkUrlcontroller.clear();
+      showSnackbarSuccess(context, msg: 'Successfully, added image!');
+    } else {}
   }
 
   handleTakePhoto(BuildContext context) async {
