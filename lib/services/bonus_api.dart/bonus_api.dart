@@ -43,6 +43,19 @@ class BonusApi extends ChangeNotifier {
         .collection('referrals')
         .snapshots();
   }
+
+  Future<QuerySnapshot> getBonus(
+    int limit, {
+    DocumentSnapshot startAfter,
+  }) async {
+    final refUsers = bonusRef.orderBy('isRead', descending: true).limit(limit);
+
+    if (startAfter == null) {
+      return refUsers.get();
+    } else {
+      return refUsers.startAfterDocument(startAfter).get();
+    }
+  }
 }
 
 Future showEligibility(context, {String msg, VoidCallback onTap}) {

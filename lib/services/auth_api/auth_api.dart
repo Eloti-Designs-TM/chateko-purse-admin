@@ -1,4 +1,3 @@
-import 'package:chateko_purse_admin/models/referrals/referral.dart';
 import 'package:chateko_purse_admin/models/user/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,40 +42,6 @@ class AuthApi with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> signUpUser({
-    @required String email,
-    @required String password,
-    @required String firstName,
-    @required String phone,
-    @required String lastName,
-    @required String referralCode,
-    @required String referrarCode,
-  }) async {
-    var referral = ReferSystem();
-    final currentUser = await firebaseAuth.createUserWithEmailAndPassword(
-        email: email, password: password);
-
-    await userRef.doc(currentUser.user.uid).set(users.userToDoc(
-        referralCode: referralCode,
-        referrarCode: referrarCode,
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        phone: phone,
-        userID: currentUser.user.uid));
-    referral.activePayment = 0;
-    referral.activeReferralCount = 0;
-    referral.pedingPayment = 0;
-    referral.pendingReferralCount = 0;
-    referral.referralCode = referralCode;
-    referral.userID = currentUser.user.uid;
-    await getCurrentUser(currentUser.user.uid);
-    await saveCredentials(email: email, password: password);
-    await referRef.doc(referralCode).set(referral.toDoc());
-    currentFirebase = currentUser.user;
-    notifyListeners();
-  }
-
   void showMessage(String message) {
     message = message;
   }
@@ -98,28 +63,6 @@ class AuthApi with ChangeNotifier {
   // Reset Password
   Future<void> sendPasswordResetEmail(String email) async {
     await firebaseAuth.sendPasswordResetEmail(email: email);
-  }
-
-  convertToEmailAndPassword({
-    @required String email,
-    @required String password,
-    @required String firstName,
-    @required String phone,
-    @required String lastName,
-  }) async {
-    final currentUser = firebaseAuth.currentUser;
-    final credential =
-        EmailAuthProvider.credential(email: email, password: password);
-    currentUser.linkWithCredential(credential);
-
-    await userRef.doc(currentUser.uid).set(users.userToDoc(
-        referralCode: '',
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        phone: phone,
-        userID: currentUser.uid));
-    await getCurrentUser(currentUser.uid);
   }
 
   Future<void> signInAnonymously() async {

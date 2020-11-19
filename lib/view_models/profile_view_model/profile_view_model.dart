@@ -19,13 +19,15 @@ enum ProfileState { Initial, Loading, Done }
 class ProfileViewModel extends BaseViewModel {
   final StorageReference storageRef = FirebaseStorage.instance.ref();
 
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
+  TextEditingController fullNameController = TextEditingController();
+
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
+  TextEditingController bankNameController = TextEditingController();
+  TextEditingController acctNameController = TextEditingController();
+  TextEditingController acctNumberController = TextEditingController();
   final authApi = GetIt.I.get<AuthApi>();
   final userApi = GetIt.I.get<UserApi>();
 
@@ -39,11 +41,14 @@ class ProfileViewModel extends BaseViewModel {
   ProfileState profileState = ProfileState.Initial;
 
   setUserToField(Users users) {
-    firstNameController.text = users.firstName;
-    lastNameController.text = users.lastName;
+    fullNameController.text = users.fullName;
     emailController.text = users.email;
     phoneController.text = users.phone;
     addressController.text = users.address;
+    acctNameController.text = users.accountName;
+    acctNumberController.text = users.accountNumber;
+    bankNameController.text = users.bankName;
+
     passwordController.text = '******';
   }
 
@@ -113,7 +118,7 @@ class ProfileViewModel extends BaseViewModel {
     try {
       isUploadingForImage = true;
       StorageUploadTask uploadTask = storageRef
-          .child("users_pictures/${users.userID}/${users.firstName}$postId.jpg")
+          .child("users_pictures/${users.userID}/${users.fullName}$postId.jpg")
           .putFile(file);
       StorageTaskSnapshot storageSnap = await uploadTask.onComplete;
       String downloadUrl = await storageSnap.ref.getDownloadURL();
@@ -130,20 +135,13 @@ class ProfileViewModel extends BaseViewModel {
   changePicture() {}
 
   updateProfile(BuildContext context, Users users) async {
-    if (users.firstName != firstNameController.text) {
+    if (users.fullName != fullNameController.text) {
       await authApi.userRef.doc(users.userID).update({
-        'firstName': firstNameController.text,
-        'fullName': '${firstNameController.text} ${lastNameController.text}',
+        'fullName': '${fullNameController.text}',
       });
-      showSnackbarSuccess(context, msg: 'Successfully Updated First-name');
+      showSnackbarSuccess(context, msg: 'Successfully Updated Name');
     }
-    if (users.lastName != lastNameController.text) {
-      await authApi.userRef.doc(users.userID).update({
-        'lastName': lastNameController.text,
-        'fullName': '${firstNameController.text} ${lastNameController.text}',
-      });
-      showSnackbarSuccess(context, msg: 'Successfully Updated lase-name');
-    }
+
     if (users.phone != phoneController.text) {
       await authApi.userRef.doc(users.userID).update({
         'phone': phoneController.text,
@@ -162,6 +160,25 @@ class ProfileViewModel extends BaseViewModel {
         'email': emailController.text,
       });
       showSnackbarSuccess(context, msg: 'Successfully Updated Email');
+    }
+
+    if (users.bankName != bankNameController.text) {
+      await authApi.userRef.doc(users.userID).update({
+        'bankName': bankNameController.text,
+      });
+      showSnackbarSuccess(context, msg: 'Successfully Updated Bank Name');
+    }
+    if (users.accountName != acctNameController.text) {
+      await authApi.userRef.doc(users.userID).update({
+        'accountName': acctNameController.text,
+      });
+      showSnackbarSuccess(context, msg: 'Successfully Updated Account Name');
+    }
+    if (users.accountNumber != acctNumberController.text) {
+      await authApi.userRef.doc(users.userID).update({
+        'accountNumber': acctNumberController.text,
+      });
+      showSnackbarSuccess(context, msg: 'Successfully Updated Account Number');
     }
   }
 }

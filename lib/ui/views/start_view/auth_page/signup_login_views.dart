@@ -4,7 +4,6 @@ import 'package:chateko_purse_admin/view_models/start_view_model/landing_view_mo
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'login_page/login.dart';
-import 'signin/sign_up.dart';
 import 'widgets/custom_curves.dart';
 
 class SignUpLogin extends StatefulWidget {
@@ -75,25 +74,22 @@ class _SignUpLoginState extends State<SignUpLogin> {
                       Container(
                         color: Colors.blue[100].withOpacity(.1),
                         child: Container(
-                          child: isLogin
-                              ? Login(
-                                  onTapSignUp: () {
-                                    // model.onTapChangePageView(1);
-                                  },
-                                  scaffoldKey: scaffoldKey)
-                              : SignUp(onTapLogin: () {
-                                  // model.onTapChangePageView(0);
-                                }),
-                          // child: PageView(
-                          //   scrollDirection: Axis.horizontal,
-                          //   controller: model.pageController,
-                          //   physics: NeverScrollableScrollPhysics(),
-                          //   onPageChanged: model.onPageChanged,
-                          //   children: [
+                            child: Login(
+                                onTapSignUp: () {
+                                  // model.onTapChangePageView(1);
+                                },
+                                scaffoldKey: scaffoldKey)
 
-                          //   ],
-                          // ),
-                        ),
+                            // child: PageView(
+                            //   scrollDirection: Axis.horizontal,
+                            //   controller: model.pageController,
+                            //   physics: NeverScrollableScrollPhysics(),
+                            //   onPageChanged: model.onPageChanged,
+                            //   children: [
+
+                            //   ],
+                            // ),
+                            ),
                       ),
                     ],
                   ),

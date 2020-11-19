@@ -5,9 +5,10 @@ class Users {
   String userID;
   String referralCode;
   String referrarCode;
-  String firstName;
-  String lastName;
+
   String email;
+  bool isNew;
+
   String fullName;
   String phone;
   String address;
@@ -15,83 +16,95 @@ class Users {
   double serviceValues;
   String password;
   String activateRefarral;
+
   String paidFirstInvestment;
+  String bankName;
+  String accountName;
+  String accountNumber;
 
   Users(
-      {this.firstName,
-      this.activateRefarral,
+      {this.activateRefarral,
       this.userID,
-      this.lastName,
       this.email,
       this.referralCode,
+      this.isNew,
       this.referrarCode,
       this.fullName,
       this.phone,
       this.address,
       this.serviceValues,
-      this.paidFirstInvestment,
       this.password,
+      this.accountName,
+      this.accountNumber,
+      this.bankName,
       this.imageUrl});
 
   factory Users.fromDoc(DocumentSnapshot doc) {
     final data = doc.data();
     return Users(
       userID: doc.id,
-      firstName: data['firstName'],
       referralCode: data['referalCode'],
       referrarCode: data['referrarCode'],
-      lastName: data['lastName'],
       fullName: data['fullName'],
       phone: data['phone'],
       address: data['address'],
+      isNew: data['new'],
       email: data['email'],
       imageUrl: data['imageUrl'],
       password: data['password'],
       activateRefarral: data['activateRefarral'],
       serviceValues: data['serviceValue'],
-      paidFirstInvestment: data['paidFirstInvestment'],
+      accountName: data['accountName'],
+      accountNumber: data['accountNumber'],
+      bankName: data['bankName'],
     );
   }
 
   Map<String, dynamic> toDoc() {
     var data = Map<String, dynamic>();
     data['userID'] = this.userID;
-    data['firstName'] = this.firstName;
-    data['lastName'] = this.lastName;
-    data['fullName'] = this.firstName + " " + this.lastName;
+    data['fullName'] = this.fullName;
     data['address'] = this.address;
     data['email'] = this.email;
     data['imageUrl'] =
-        'https://scontent-los2-1.xx.fbcdn.net/v/t1.0-9/110195364_2817051085250329_2406961046516895270_o.jpg?_nc_cat=103&_nc_sid=84a396&_nc_eui2=AeFYs6INspmoNphqeZH5Q3bCgY0YH9L6FwSBjRgf0voXBExbx4Eh9MQeoyy4n--ppkCo4tQNs-oNrRNLLXfAo6eS&_nc_ohc=PoVBL2CSh94AX9fG-mA&_nc_ht=scontent-los2-1.xx&oh=caaaafc59aac5423e864c389e26bd9b5&oe=5F6DB90B';
+        'https://firebasestorage.googleapis.com/v0/b/chateko-app.appspot.com/o/app_data%2Fapp_const_profile_image%2Fface.png?alt=media&token=41487622-65db-4b5b-9308-934f00780c79';
     data['serviceValue'] = this.serviceValues;
     return data;
   }
 
   Map<String, dynamic> userToDoc({
     @required String userID,
-    @required String firstName,
-    @required String lastName,
+    @required String fullName,
     @required String email,
     @required String referralCode,
-    String referrarCode,
+    String referrarCodes,
     @required String phone,
     String address,
     String imageUrl,
     double serviceValues,
+    String accountName,
+    String accountNumber,
+    String bankName,
   }) {
     var data = Map<String, dynamic>();
     data['userID'] = userID;
     data['referalCode'] = referralCode;
-    data['referrarCode'] = referrarCode;
-    data['firstName'] = firstName;
-    data['lastName'] = lastName;
-    data['fullName'] = firstName + " " + lastName;
+    data['referrarCode'] = referrarCodes.isEmpty || referrarCodes == null
+        ? 'ref-9522780'
+        : referrarCodes;
+    data['new'] = true;
+    data['fullName'] = fullName;
     data['phone'] = phone ?? '';
     data['address'] = address ?? '';
     data['email'] = email;
+    data['isAdmin'] = false;
     data['activateRefarral'] = 'pending';
+    data['paidFirstInvestment'] = 'pending';
+    data['accountName'] = accountName;
+    data['accountNumber'] = accountNumber;
+    data['bankName'] = bankName;
     data['imageUrl'] = imageUrl == null
-        ? 'https://firebasestorage.googleapis.com/v0/b/my-daily-wash.appspot.com/o/app_data%2Fuser_profile_pics%2Fdefault_user_pics%2FFace-Profile-User-Man-Boy-Person-Avatar-512.png?alt=media&token=85a6009e-5d4a-425f-a22a-37ea7c2323f5'
+        ? 'https://firebasestorage.googleapis.com/v0/b/chateko-app.appspot.com/o/app_data%2Fapp_const_profile_image%2Fface.png?alt=media&token=41487622-65db-4b5b-9308-934f00780c79'
         : imageUrl;
 
     return data;

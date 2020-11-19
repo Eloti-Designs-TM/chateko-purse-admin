@@ -8,7 +8,6 @@ import 'package:chateko_purse_admin/view_models/invest_view_model/invest_view_mo
 import 'package:chateko_purse_admin/view_models/profile_view_model/profile_view_model.dart';
 import 'package:chateko_purse_admin/view_models/theme_view_model/theme_model.dart';
 import '../../././view_models/start_view_model/auth_view_model/login_view_model.dart';
-import '../../././view_models/start_view_model/auth_view_model/sign_up_view_model.dart';
 import '../../././view_models/start_view_model/landing_view_model/slider_view_model.dart';
 import '../../././view_models/start_view_model/landing_view_model/start_view_model.dart';
 
@@ -18,7 +17,6 @@ List<SingleChildWidget> providers = [
   ChangeNotifierProvider.value(value: InvestApi()),
   ChangeNotifierProvider.value(value: StartPageViewModel()),
   ChangeNotifierProvider.value(value: SliderViewModel()),
-  ChangeNotifierProvider.value(value: SignUpViewModel()),
   ChangeNotifierProvider.value(value: LoginViewModel()),
   ChangeNotifierProvider.value(value: ThemeModel()),
   ChangeNotifierProvider.value(value: ProfileViewModel()),

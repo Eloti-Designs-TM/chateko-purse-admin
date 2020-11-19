@@ -73,4 +73,17 @@ class UserApi with ChangeNotifier {
       print(e.toString());
     }
   }
+
+  Future<QuerySnapshot> getUsers(
+    int limit, {
+    DocumentSnapshot startAfter,
+  }) async {
+    final refUsers = usersRef.orderBy('new', descending: true).limit(limit);
+
+    if (startAfter == null) {
+      return refUsers.get();
+    } else {
+      return refUsers.startAfterDocument(startAfter).get();
+    }
+  }
 }

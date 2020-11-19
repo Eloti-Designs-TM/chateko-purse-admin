@@ -54,4 +54,17 @@ class InvestApi with ChangeNotifier {
       'isRead': false,
     });
   }
+
+  Future<QuerySnapshot> getInvest(
+    int limit, {
+    DocumentSnapshot startAfter,
+  }) async {
+    final refUsers = investRef.orderBy('isRead', descending: true).limit(limit);
+
+    if (startAfter == null) {
+      return refUsers.get();
+    } else {
+      return refUsers.startAfterDocument(startAfter).get();
+    }
+  }
 }
