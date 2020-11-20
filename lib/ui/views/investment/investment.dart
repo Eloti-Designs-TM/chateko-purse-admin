@@ -15,63 +15,70 @@ class InvestmentsPage extends StatelessWidget {
       child: Consumer2<InvestPagination, UserApi>(
         builder: (_, api, userApi, child) => api.investments.isEmpty
             ? Center(child: CircularProgressIndicator())
-            : ListView.separated(
-                separatorBuilder: (_, i) => Divider(),
-                itemCount: api.investments.length,
-                itemBuilder: (_, i) {
-                  final kInvest = api.investments[i];
-                  return StreamBuilder<DocumentSnapshot>(
-                      stream: userApi.getCurrentUser(userID: kInvest.userID),
-                      builder: (context, snapshot2) {
-                        if (!snapshot2.hasData) {
-                          return Container();
-                        }
-                        final doc = snapshot2.data;
-                        var user = Users();
-                        user = Users.fromDoc(doc);
-
-                        return Container(
-                          child: ListTile(
-                            title: Text('${kInvest.id}'),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                sizedBoxHeight8,
-                                Text('${user.fullName}'),
-                                Text('N${kInvest.totalAmount}'),
-                                kInvest.isRead == true
-                                    ? Chip(
-                                        padding: const EdgeInsets.all(0),
-                                        label: Text(
-                                          'New',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        backgroundColor: Colors.red,
-                                      )
-                                    : Container(),
-                              ],
-                            ),
-                            leading: CircleAvatar(
-                              backgroundImage:
-                                  CachedNetworkImageProvider(user.imageUrl),
-                            ),
-                            trailing: Text('${kInvest.status}',
-                                style: TextStyle(
-                                    color: kInvest.status == 'active'
-                                        ? Colors.green
-                                        : Colors.red)),
-                            onTap: () {
-                              // if (kInvest.isRead) {
-                              //   api.isCardClick(kInvest.id);
-                              // }
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (_) => InvestmentDetails(
-                                      investment: kInvest, user: user)));
-                            },
-                          ),
-                        );
-                      });
+            : RefreshIndicator(
+                onRefresh: () {
+                  return api.fetchNextInvestments();
                 },
+                child: ListView.separated(
+                  separatorBuilder: (_, i) => Divider(),
+                  itemCount: api.investments.length,
+                  itemBuilder: (_, i) {
+                    final kInvest = api.investments[i];
+                    return StreamBuilder<DocumentSnapshot>(
+                        stream: userApi.getCurrentUser(userID: kInvest.userID),
+                        builder: (context, snapshot2) {
+                          if (!snapshot2.hasData) {
+                            return Container();
+                          }
+                          final doc = snapshot2.data;
+                          var user = Users();
+                          user = Users.fromDoc(doc);
+
+                          return Container(
+                            child: ListTile(
+                              title: Text('${kInvest.id}'),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  sizedBoxHeight8,
+                                  Text('${user.fullName}'),
+                                  Text('N${kInvest.totalAmount}'),
+                                  kInvest.isRead == true
+                                      ? Chip(
+                                          padding: const EdgeInsets.all(0),
+                                          label: Text(
+                                            'New',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          backgroundColor: Colors.red,
+                                        )
+                                      : Container(),
+                                ],
+                              ),
+                              leading: CircleAvatar(
+                                backgroundImage:
+                                    CachedNetworkImageProvider(user.imageUrl),
+                              ),
+                              trailing: Text('${kInvest.status}',
+                                  style: TextStyle(
+                                      color: kInvest.status == 'active'
+                                          ? Colors.green
+                                          : Colors.red)),
+                              onTap: () async {
+                                if (kInvest.isRead) {
+                                  await api.isCardClick(kInvest.id);
+                                }
+                                await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (_) => InvestmentDetails(
+                                            investment: kInvest, user: user)));
+                              },
+                            ),
+                          );
+                        });
+                  },
+                ),
               ),
       ),
     );

@@ -1,11 +1,12 @@
 import 'package:chateko_purse_admin/models/user/user.dart';
 import 'package:chateko_purse_admin/services/auth_api/auth_api.dart';
 import 'package:chateko_purse_admin/services/users_api/users_api.dart';
+import 'package:chateko_purse_admin/view_models/profile_view_model/profile_view_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-class UsersPagination extends ChangeNotifier {
+class UsersPagination extends ProfileViewModel {
   final authApi = GetIt.I.get<AuthApi>();
   final userApi = GetIt.I.get<UserApi>();
 
@@ -32,7 +33,7 @@ class UsersPagination extends ChangeNotifier {
     }
   }
 
-  final _usersSnapshot = <DocumentSnapshot>[];
+  var usersSnapshot = <DocumentSnapshot>[];
   String _errorMessage = '';
   int documentLimit = 10;
   bool _hasNext = true;
@@ -42,7 +43,7 @@ class UsersPagination extends ChangeNotifier {
 
   bool get hasNext => _hasNext;
 
-  List<Users> get users => _usersSnapshot.map((snap) {
+  List<Users> get users => usersSnapshot.map((snap) {
         return Users.fromDoc(snap);
       }).toList();
 
@@ -55,9 +56,9 @@ class UsersPagination extends ChangeNotifier {
     try {
       final snap = await userApi.getUsers(
         documentLimit,
-        startAfter: _usersSnapshot.isNotEmpty ? _usersSnapshot.last : null,
+        startAfter: usersSnapshot.isNotEmpty ? usersSnapshot.last : null,
       );
-      _usersSnapshot.addAll(snap.docs);
+      usersSnapshot.addAll(snap.docs);
 
       if (snap.docs.length < documentLimit) _hasNext = false;
       notifyListeners();
@@ -67,5 +68,14 @@ class UsersPagination extends ChangeNotifier {
     }
 
     _isFetchingUsers = false;
+  }
+
+  handleSearch(String query) async {
+    final search =
+        await userApi.usersRef.where('email', isLessThanOrEqualTo: query).get();
+    usersSnapshot = search.docs;
+    notifyListeners();
+    print(search.docs);
+    print(usersSnapshot);
   }
 }

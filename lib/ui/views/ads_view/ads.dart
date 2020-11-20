@@ -230,7 +230,8 @@ class ImagePreview extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text('Image Preview'),
+        title: Text('Preview'),
+        centerTitle: true,
       ),
       body: Center(
           child: Container(

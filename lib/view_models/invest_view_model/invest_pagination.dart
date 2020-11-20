@@ -1,11 +1,12 @@
 import 'package:chateko_purse_admin/models/invest/investment.dart';
 import 'package:chateko_purse_admin/services/auth_api/auth_api.dart';
 import 'package:chateko_purse_admin/services/invest_api/invest_api.dart';
+import 'package:chateko_purse_admin/view_models/invest_view_model/invest_view_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-class InvestPagination extends ChangeNotifier {
+class InvestPagination extends InvestViewModel {
   final authApi = GetIt.I.get<AuthApi>();
   final investApi = GetIt.I.get<InvestApi>();
 

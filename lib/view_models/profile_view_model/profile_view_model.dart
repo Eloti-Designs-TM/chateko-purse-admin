@@ -16,7 +16,7 @@ import '../base_view_model.dart';
 
 enum ProfileState { Initial, Loading, Done }
 
-class ProfileViewModel extends BaseViewModel {
+class ProfileViewModel extends ChangeNotifier {
   final StorageReference storageRef = FirebaseStorage.instance.ref();
 
   TextEditingController fullNameController = TextEditingController();
@@ -180,5 +180,11 @@ class ProfileViewModel extends BaseViewModel {
       });
       showSnackbarSuccess(context, msg: 'Successfully Updated Account Number');
     }
+  }
+
+  isCardClick(String id) async {
+    await userApi.usersRef.doc(id).update({
+      'new': false,
+    });
   }
 }

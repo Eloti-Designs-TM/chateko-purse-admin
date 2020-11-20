@@ -17,14 +17,11 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  final authApi = GetIt.I.get<AuthApi>();
-
   @override
   Widget build(BuildContext context) {
     final profileModel = Provider.of<ProfileViewModel>(context);
-    var users = widget.users;
-    users = authApi.users;
-    users == null ? null : profileModel.setUserToField(users);
+
+    widget.users == null ? null : profileModel.setUserToField(widget.users);
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Profile'),
@@ -48,9 +45,9 @@ class _ProfileViewState extends State<ProfileView> {
                                     ProfileState.Loading
                                 ? Center(child: CircularProgressIndicator())
                                 : null,
-                            backgroundImage: users == null
+                            backgroundImage: widget.users == null
                                 ? null
-                                : NetworkImage(users.imageUrl),
+                                : NetworkImage(widget.users.imageUrl),
                           ),
                         ),
                         Positioned(
@@ -59,7 +56,8 @@ class _ProfileViewState extends State<ProfileView> {
                           child: Tooltip(
                             message: 'Add Image',
                             child: MaterialButton(
-                              onPressed: () => selectImage(context, users),
+                              onPressed: () =>
+                                  selectImage(context, widget.users),
                               color: Colors.white,
                               shape: CircleBorder(),
                               padding: const EdgeInsets.all(4),
@@ -144,7 +142,7 @@ class _ProfileViewState extends State<ProfileView> {
                         isOutline: false,
                         title: 'Update',
                         onPressed: () {
-                          profileModel.updateProfile(context, users);
+                          profileModel.updateProfile(context, widget.users);
                         },
                       ),
                     ),

@@ -69,4 +69,10 @@ class InvestViewModel with ChangeNotifier {
           id: id, status: status, invest: invest, user: user);
     }
   }
+
+  isCardClick(String id) async {
+    await investApi.investRef.doc(id).update({
+      'isRead': false,
+    });
+  }
 }

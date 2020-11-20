@@ -19,75 +19,82 @@ class BonusPage extends StatelessWidget {
                 builder: (_, bonusApi, userApi, child) => bonusApi
                         .bonuses.isEmpty
                     ? Center(child: CircularProgressIndicator())
-                    : ListView.separated(
-                        controller: bonusApi.scrollController,
-                        separatorBuilder: (_, i) => Divider(),
-                        itemCount: bonusApi.bonuses.length,
-                        itemBuilder: (_, i) {
-                          final kBonus = bonusApi.bonuses[i];
-                          return StreamBuilder<DocumentSnapshot>(
-                              stream:
-                                  userApi.getCurrentUser(userID: kBonus.userID),
-                              builder: (context, snapshot2) {
-                                if (!snapshot2.hasData) {
-                                  return Container();
-                                }
-                                final doc = snapshot2.data;
-                                var user = Users();
-                                user = Users.fromDoc(doc);
-
-                                return Container(
-                                  child: ListTile(
-                                    title: Text('${user.fullName}'),
-                                    subtitle: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        sizedBoxHeight8,
-                                        Text('${user.email}'),
-                                        Text(
-                                            'N${convertNumberToCurrency(kBonus.amount)}',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1),
-                                        Text('${kBonus.timeStamp}'),
-                                        kBonus.isRead == false
-                                            ? Chip(
-                                                padding:
-                                                    const EdgeInsets.all(0),
-                                                label: Text(
-                                                  'New',
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                                backgroundColor: Colors.red,
-                                              )
-                                            : Container(),
-                                      ],
-                                    ),
-                                    leading: CircleAvatar(
-                                      backgroundImage:
-                                          CachedNetworkImageProvider(
-                                              user.imageUrl),
-                                    ),
-                                    trailing: Text('${kBonus.status}',
-                                        style: TextStyle(
-                                            color: kBonus.status == 'paid'
-                                                ? Colors.green
-                                                : Colors.red)),
-                                    onTap: () {
-                                      if (kBonus.isRead) {
-                                        // bonusApi.isCardClick(kBonus.id);
-                                      }
-                                      showDialog(
-                                          context: context,
-                                          builder: (_) => ShowRequestDetails(
-                                              user: user, bonus: kBonus));
-                                    },
-                                  ),
-                                );
-                              });
+                    : RefreshIndicator(
+                        onRefresh: () {
+                          return bonusApi.fetchNextBonuses();
                         },
+                        child: ListView.separated(
+                          controller: bonusApi.scrollController,
+                          separatorBuilder: (_, i) => Divider(),
+                          itemCount: bonusApi.bonuses.length,
+                          itemBuilder: (_, i) {
+                            final kBonus = bonusApi.bonuses[i];
+                            return StreamBuilder<DocumentSnapshot>(
+                                stream: userApi.getCurrentUser(
+                                    userID: kBonus.userID),
+                                builder: (context, snapshot2) {
+                                  if (!snapshot2.hasData) {
+                                    return Container();
+                                  }
+                                  final doc = snapshot2.data;
+                                  var user = Users();
+                                  user = Users.fromDoc(doc);
+
+                                  return Container(
+                                    child: ListTile(
+                                      title: Text('${user.fullName}'),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          sizedBoxHeight8,
+                                          Text('${user.email}'),
+                                          Text(
+                                              'N${convertNumberToCurrency(kBonus.amount)}',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1),
+                                          Text('${kBonus.timeStamp}'),
+                                          kBonus.isRead == false
+                                              ? Chip(
+                                                  padding:
+                                                      const EdgeInsets.all(0),
+                                                  label: Text(
+                                                    'New',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                  backgroundColor: Colors.red,
+                                                )
+                                              : Container(),
+                                        ],
+                                      ),
+                                      leading: CircleAvatar(
+                                        backgroundImage:
+                                            CachedNetworkImageProvider(
+                                                user.imageUrl),
+                                      ),
+                                      trailing: Text('${kBonus.status}',
+                                          style: TextStyle(
+                                              color: kBonus.status == 'paid'
+                                                  ? Colors.green
+                                                  : Colors.red)),
+                                      onTap: () async {
+                                        if (!kBonus.isRead) {
+                                          print('runig');
+                                          await bonusApi
+                                              .isCardClick(kBonus.referId);
+                                        }
+                                        await showDialog(
+                                            context: context,
+                                            builder: (_) => ShowRequestDetails(
+                                                user: user, bonus: kBonus));
+                                      },
+                                    ),
+                                  );
+                                });
+                          },
+                        ),
                       ))));
   }
 }

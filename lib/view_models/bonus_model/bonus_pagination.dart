@@ -1,6 +1,7 @@
 import 'package:chateko_purse_admin/models/invest/bonus.dart';
 import 'package:chateko_purse_admin/services/auth_api/auth_api.dart';
 import 'package:chateko_purse_admin/services/bonus_api.dart/bonus_api.dart';
+import 'package:chateko_purse_admin/ui/views/widget/snacks.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -67,5 +68,18 @@ class BonusPagination extends ChangeNotifier {
     }
 
     _isFetchingUsers = false;
+  }
+
+  isCardClick(String id) async {
+    await bonusApi.bonusRef.doc(id).update({
+      'isRead': true,
+    });
+  }
+
+  updateStatus(context, String id, String status) async {
+    await bonusApi.bonusRef.doc(id).update({
+      'status': status,
+    });
+    showSnackbarSuccess(context, msg: 'Updated Bonus Request status');
   }
 }

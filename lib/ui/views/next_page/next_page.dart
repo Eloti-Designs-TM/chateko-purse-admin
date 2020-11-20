@@ -1,5 +1,6 @@
 import 'package:chateko_purse_admin/ui/views/bonus/bonus.dart';
 import 'package:chateko_purse_admin/ui/views/others/others.dart';
+import 'package:chateko_purse_admin/view_models/profile_view_model/user_pagination.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:chateko_purse_admin/ui/views/manage_user/manage_user_page.dart';
@@ -10,43 +11,31 @@ import 'package:chateko_purse_admin/view_models/home_view_model/home_view_model.
 class NextPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: TextFormField(
-            // controller: userReq.searchController,
-            style: TextStyle(fontSize: 18),
-            // onFieldSubmitted: userReq.handleSearch,
-            decoration: InputDecoration(
-              filled: true,
-              hintText: 'Search user',
-              fillColor: Colors.white,
-              suffixIcon: InkWell(
-                  // onTap: () =>
-                  // userReq.handleSearch(userReq.searchController.text),
-                  child: Icon(Icons.search)),
-            )),
-      ),
-      body: Consumer<HomeViewModel>(
-        builder: (_, homeModel, ch) => _pages(homeModel.detailState),
+    return Consumer<HomeViewModel>(
+      builder: (_, homeModel, ch) => Scaffold(
+        appBar: AppBar(
+          title: Text(_pages(homeModel.detailState, isTitle: true)),
+          centerTitle: true,
+        ),
+        body: _pages(homeModel.detailState),
       ),
     );
   }
 
-  _pages([DetailState detailState]) {
+  _pages(DetailState detailState, {bool isTitle = false}) {
     print(detailState);
     switch (detailState) {
       case DetailState.Users:
-        return ManageUserPage();
+        return isTitle ? 'All Users' : ManageUserPage();
         break;
       case DetailState.Investments:
-        return InvestmentsPage();
+        return isTitle ? 'All Investments' : InvestmentsPage();
         break;
       case DetailState.Bonus:
-        return BonusPage();
+        return isTitle ? 'All Bonuses' : BonusPage();
         break;
       case DetailState.Others:
-        return Others();
-
+        return isTitle ? 'Others' : Others();
         break;
       case DetailState.Loading:
         return Center(
@@ -59,3 +48,29 @@ class NextPage extends StatelessWidget {
     }
   }
 }
+
+// class SearchBar extends StatelessWidget {
+//   final TextEditingController searchController = TextEditingController();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return UserInjector(
+//       child: Consumer<UsersPagination>(
+//         builder: (context, api, child) => TextFormField(
+//             controller: searchController,
+//             style: TextStyle(fontSize: 18),
+//             // onFieldSubmitted: userReq.handleSearch,
+//             onChanged: api.handleSearch,
+//             decoration: InputDecoration(
+//               filled: true,
+//               hintText: 'Search',
+//               fillColor: Colors.white,
+//               suffixIcon: InkWell(
+//                   // onTap: () =>
+//                   // userReq.handleSearch(userReq.searchController.text),
+//                   child: Icon(Icons.search)),
+//             )),
+//       ),
+//     );
+//   }
+// }

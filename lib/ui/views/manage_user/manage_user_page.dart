@@ -24,45 +24,58 @@ class _ManageUserPageState extends State<ManageUserPage> {
               },
               child: Stack(
                 children: [
-                  ListView.separated(
-                      separatorBuilder: (_, i) => Divider(),
-                      controller: userReq.scrollController,
-                      itemCount: userReq.users.length,
-                      itemBuilder: (context, i) {
-                        final kUser = userReq.users[i];
-
-                        return ListTile(
-                          title: Text(
-                            '${kUser.fullName}',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('${kUser.email}\n${kUser.phone}'),
-                              kUser.isNew == true
-                                  ? Chip(
-                                      padding: const EdgeInsets.all(0),
-                                      label: Text(
-                                        'New',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      backgroundColor: Colors.red,
-                                    )
-                                  : Container(),
-                            ],
-                          ),
-                          leading: CircleAvatar(
-                            backgroundColor: Colors.grey[300],
-                            backgroundImage: NetworkImage('${kUser.imageUrl}'),
-                          ),
-                          trailing: Icon(Icons.arrow_forward, size: 14),
-                          onTap: () => showDialog(
-                            context: context,
-                            builder: (ctx) => UserDialog(users: kUser),
-                          ),
-                        );
-                      }),
+                  Builder(builder: (context) {
+                    Users user = Users();
+                    var users = List<Users>();
+                    userReq.usersSnapshot.map((e) {
+                      user = Users.fromDoc(e);
+                      users.add(user);
+                    }).toSet();
+                    return ListView.separated(
+                        separatorBuilder: (_, i) => Divider(),
+                        controller: userReq.scrollController,
+                        itemCount: userReq.usersSnapshot.length,
+                        itemBuilder: (context, i) {
+                          final kUser = users[i];
+                          return ListTile(
+                            title: Text(
+                              '${kUser.fullName}',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('${kUser.email}\n${kUser.phone}'),
+                                kUser.isNew == true
+                                    ? Chip(
+                                        padding: const EdgeInsets.all(0),
+                                        label: Text(
+                                          'New',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        backgroundColor: Colors.red,
+                                      )
+                                    : Container(),
+                              ],
+                            ),
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.grey[300],
+                              backgroundImage:
+                                  NetworkImage('${kUser.imageUrl}'),
+                            ),
+                            trailing: Icon(Icons.arrow_forward, size: 14),
+                            onTap: () async {
+                              if (kUser.isNew) {
+                                await userReq.isCardClick(kUser.userID);
+                              }
+                              await showDialog(
+                                context: context,
+                                builder: (ctx) => UserDialog(users: kUser),
+                              );
+                            },
+                          );
+                        });
+                  }),
                   if (userReq.users.isEmpty || userReq.users == null)
                     Center(
                       child: Container(
@@ -198,7 +211,7 @@ class UserDialog extends StatelessWidget {
       FlatButton.icon(
           color: Colors.grey[200],
           onPressed: () {
-            return Navigator.of(context).push(MaterialPageRoute(
+            Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ProfileView(users: users)));
           },
           icon: Icon(Icons.edit),

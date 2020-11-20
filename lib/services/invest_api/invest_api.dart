@@ -49,12 +49,6 @@ class InvestApi with ChangeNotifier {
     await investRef.doc(id).update(doc);
   }
 
-  isCardClick(String id) async {
-    await investRef.doc(id).update({
-      'isRead': false,
-    });
-  }
-
   Future<QuerySnapshot> getInvest(
     int limit, {
     DocumentSnapshot startAfter,
