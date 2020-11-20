@@ -1,4 +1,4 @@
-import 'package:bed_admin/provider/send_req/openUrls.dart';
+gtiimport 'package:bed_admin/provider/send_req/openUrls.dart';
 import 'package:bed_admin/provider/send_req/ride_request.dart';
 import 'package:bed_admin/provider/send_req/shippings_req.dart';
 import 'package:bed_admin/provider/send_req/user_req.dart';
@@ -23,14 +23,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: ThemeModel()),
         ChangeNotifierProvider.value(value: UserReqs()),
         ChangeNotifierProvider.value(value: AuthService()),
-        ChangeNotifierProvider.value(value: ShippinReqs()),
+        ChangeNotifierProvider.value(value: ShippiznReqs()),
         ChangeNotifierProvider.value(value: OpenUrls()),
         ChangeNotifierProvider.value(value: RideReq()),
       ],
       child: Builder(builder: (context) {
         return Consumer<ThemeModel>(builder: (context, model, chi) {
           return MaterialApp(
-            title: 'BED Logistics ADMIN',
+            title: 'Chateko Purse ADMIN',
             theme: model.theme,
             debugShowCheckedModeBanner: false,
             home: StartPage(),
