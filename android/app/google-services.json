@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "935633955820",
+    "firebase_url": "https://chateko-app.firebaseio.com",
+    "project_id": "chateko-app",
+    "storage_bucket": "chateko-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:935633955820:android:641e77310d79c3b2",
+        "android_client_info": {
+          "package_name": "com.chateko.admin.chatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "935633955820-ebr5ner9dapstt5kcd4fafr2r8frgjjq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPV-AJyDghxsRNa-S4d0SnMm7WEQnNZNE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "935633955820-ebr5ner9dapstt5kcd4fafr2r8frgjjq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:935633955820:android:2e4cb5a316b50d5a99eec9",
+        "android_client_info": {
+          "package_name": "com.elotidesigns.chateko_purse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "935633955820-ebr5ner9dapstt5kcd4fafr2r8frgjjq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPV-AJyDghxsRNa-S4d0SnMm7WEQnNZNE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "935633955820-ebr5ner9dapstt5kcd4fafr2r8frgjjq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:935633955820:android:ae988404248c9ddc99eec9",
+        "android_client_info": {
+          "package_name": "com.elotidesigns.chateko_purse_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "935633955820-ebr5ner9dapstt5kcd4fafr2r8frgjjq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPV-AJyDghxsRNa-S4d0SnMm7WEQnNZNE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "935633955820-ebr5ner9dapstt5kcd4fafr2r8frgjjq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

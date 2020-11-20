@@ -1,39 +1,30 @@
-gtiimport 'package:bed_admin/provider/send_req/openUrls.dart';
-import 'package:bed_admin/provider/send_req/ride_request.dart';
-import 'package:bed_admin/provider/send_req/shippings_req.dart';
-import 'package:bed_admin/provider/send_req/user_req.dart';
-import 'package:bed_admin/services/auth_services.dart';
-import 'package:bed_admin/ui/page/auth_page/login_page/login.dart';
-import 'package:bed_admin/ui/page/homepage/homepage.dart';
-import 'package:bed_admin/ui/page/start_page/start_page.dart';
-import 'package:bed_admin/view_models/theme_model.dart';
+import 'package:chateko_purse_admin/ui/utils/get_it.dart';
+import 'package:chateko_purse_admin/ui/utils/providers.dart';
+import 'package:chateko_purse_admin/ui/views/start_view/start_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:chateko_purse_admin/view_models/theme_view_model/theme_model.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  setup();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(value: ThemeModel()),
-        ChangeNotifierProvider.value(value: UserReqs()),
-        ChangeNotifierProvider.value(value: AuthService()),
-        ChangeNotifierProvider.value(value: ShippiznReqs()),
-        ChangeNotifierProvider.value(value: OpenUrls()),
-        ChangeNotifierProvider.value(value: RideReq()),
-      ],
+      providers: providers,
       child: Builder(builder: (context) {
         return Consumer<ThemeModel>(builder: (context, model, chi) {
           return MaterialApp(
-            title: 'Chateko Purse ADMIN',
+            title: ' Admin Chateko Purse',
             theme: model.theme,
             debugShowCheckedModeBanner: false,
-            home: StartPage(),
+            home: StartView(),
           );
         });
       }),
