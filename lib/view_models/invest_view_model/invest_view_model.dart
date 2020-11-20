@@ -9,6 +9,10 @@ import 'package:get_it/get_it.dart';
 class InvestViewModel with ChangeNotifier {
   var authApi = GetIt.I.get<AuthApi>();
   var investApi = GetIt.I.get<InvestApi>();
+  TextEditingController amountController = TextEditingController();
+  setAmountTextField(Investment invest) {
+    amountController.text = invest.totalAmount.toString();
+  }
 
   getAllInvestment() {
     try {
@@ -74,5 +78,14 @@ class InvestViewModel with ChangeNotifier {
     await investApi.investRef.doc(id).update({
       'isRead': false,
     });
+  }
+
+  updateAmount(BuildContext context, String id) async {
+    try {
+      await investApi.updateInvestmentStatus(id, {
+        'totalAmount': int.parse(amountController.text),
+      });
+    }  catch (e) {
+    }
   }
 }

@@ -1,6 +1,5 @@
 import 'package:chateko_purse_admin/models/user/user.dart';
 import 'package:chateko_purse_admin/services/auth_api/auth_api.dart';
-import 'package:chateko_purse_admin/ui/views/start_view/auth_page/signup_login_views.dart';
 import 'package:chateko_purse_admin/ui/views/widget/alert_dialog.dart';
 import 'package:chateko_purse_admin/ui/views/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
@@ -75,12 +74,7 @@ class HomeTopBar extends StatelessWidget {
         Navigator.of(context).push(MaterialPageRoute(
             fullscreenDialog: true, builder: (_) => Policy()));
         break;
-      case PageEnum.Share:
-        Share.share(
-            """"Hi there, I get 10% cash, of my savings every month, on Chateko Purse. 
-Click this link to get your 10% monthly.\nhttps://play.google.com/store/apps/details?id=com.elotidesigns.chateko_purse""",
-            subject: 'Chateko-Purse');
-        break;
+     
       case PageEnum.Bank:
         // showSuccessBankDetail(context);
         break;
@@ -107,10 +101,7 @@ Click this link to get your 10% monthly.\nhttps://play.google.com/store/apps/det
             value: PageEnum.About,
             child: PopUpButton(title: 'About', icon: Icons.info_outline),
           ),
-          PopupMenuItem(
-            value: PageEnum.Share,
-            child: PopUpButton(title: 'Share', icon: Icons.share),
-          ),
+       
           PopupMenuItem(
             value: PageEnum.Policy,
             child: PopUpButton(title: 'Privacy Policy', icon: Icons.security),

@@ -21,6 +21,8 @@ class Users {
   String bankName;
   String accountName;
   String accountNumber;
+  bool isAdmin;
+
 
   Users(
       {this.activateRefarral,
@@ -29,6 +31,7 @@ class Users {
       this.referralCode,
       this.isNew,
       this.referrarCode,
+      this.isAdmin,
       this.fullName,
       this.phone,
       this.address,
@@ -49,6 +52,7 @@ class Users {
       phone: data['phone'],
       address: data['address'],
       isNew: data['new'],
+      isAdmin: data['isAdmin'],
       email: data['email'],
       imageUrl: data['imageUrl'],
       password: data['password'],

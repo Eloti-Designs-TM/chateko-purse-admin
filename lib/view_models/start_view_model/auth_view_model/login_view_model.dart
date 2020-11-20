@@ -1,3 +1,4 @@
+import 'package:chateko_purse_admin/models/user/user.dart';
 import 'package:chateko_purse_admin/services/auth_api/auth_api.dart';
 import 'package:chateko_purse_admin/ui/views/widget/button.dart';
 import 'package:chateko_purse_admin/ui/views/widget/snacks.dart';
@@ -62,23 +63,37 @@ class LoginViewModel extends BaseViewModel with AuthViewModel {
 
         await loginApi.loginUser(context,
             email: emailController.text, password: passwordController.text);
-
         isLoading = false;
         buttonState = ButtonState.Initial;
-        notifyListeners();
-        showSnackbarSuccess(
-          context,
-          msg: 'Welcome, ${loginApi.users.fullName} ',
-        );
+        if (loginApi.users.isAdmin) {
+          isLoading = false;
+          buttonState = ButtonState.Initial;
+          notifyListeners();
+          showSnackbarSuccess(
+            context,
+            msg: 'Welcome, ${loginApi.users.fullName} ',
+          );
 
-        await Future.delayed(Duration(seconds: 2));
+          await Future.delayed(Duration(seconds: 2));
 
-        await Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (_) => HomeView()));
-        notifyListeners();
+          await Navigator.of(context)
+              .pushReplacement(MaterialPageRoute(builder: (_) => HomeView()));
+          notifyListeners();
+        } else {
+
+          await showSnackbarFailed(
+            context,
+            msg:
+                'Sorry you are not an admin, ${loginApi.users.fullName}\n Logging out....',
+          );
+          await loginApi.firebaseAuth.signOut();
+          await loginApi.localStorage.clear();
+          loginApi.users = Users();
+          notifyListeners();
+        }
       } catch (e) {
         showSnackbarFailed(context,
-            msg: 'Request Failed, Try again!!\n[${e.message.toUpperCase()}]');
+            msg: 'Request Failed, Try again!!\n[${e.message}]');
 
         isLoading = false;
         buttonState = ButtonState.Initial;
