@@ -33,7 +33,7 @@ class ShowRequestDetails extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               width: MediaQuery.of(context).size.width,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Row(
@@ -41,7 +41,7 @@ class ShowRequestDetails extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CircleAvatar(
-                        radius: 25,
+                        radius: 18,
                         backgroundImage:
                             CachedNetworkImageProvider(user.imageUrl),
                       ),
@@ -50,9 +50,9 @@ class ShowRequestDetails extends StatelessWidget {
                         children: [
                           _text('${user.fullName}', Icons.person),
                           _text('${user.email}', Icons.email,
-                              size: 16, fontWeight: FontWeight.w400),
+                              size: 14, fontWeight: FontWeight.w400),
                           _text('${user.phone}', Icons.phone,
-                              size: 16, fontWeight: FontWeight.w400),
+                              size: 14, fontWeight: FontWeight.w400),
                         ],
                       ),
                     ],
@@ -85,7 +85,7 @@ class ShowRequestDetails extends StatelessWidget {
                         shape: StadiumBorder(),
                         onPressed: () async {
                           await bonusApi.updateStatus(
-                              context, bonus.referId, 'pending');
+                              context, bonus.referId, 'pending', user);
                         },
                         textColor: bonus.status == 'pending'
                             ? Colors.white
@@ -100,7 +100,7 @@ class ShowRequestDetails extends StatelessWidget {
                         shape: StadiumBorder(),
                         onPressed: () async {
                           await bonusApi.updateStatus(
-                              context, bonus.referId, 'paid');
+                              context, bonus.referId, 'paid', user);
                         },
                         textColor: bonus.status == 'paid'
                             ? Colors.white
@@ -110,6 +110,17 @@ class ShowRequestDetails extends StatelessWidget {
                         child: Text('Paid'),
                       ),
                     ],
+                  ),
+                  SizedBox(width: 20),
+                  FlatButton(
+                    shape: StadiumBorder(),
+                    onPressed: () async {
+                      await bonusApi.deleteBonus(context, bonus.referId);
+                      Navigator.pop(context);
+                    },
+                    textColor: Colors.white,
+                    color: Colors.red,
+                    child: Text('Delete'),
                   ),
                 ],
               ),
@@ -128,14 +139,14 @@ class ShowRequestDetails extends StatelessWidget {
             Icon(
               icon,
               color: Colors.grey[600],
-              size: 16,
+              size: 12,
             ),
             SizedBox(width: 10),
             Text(
               '$text',
               overflow: TextOverflow.fade,
               style: TextStyle(
-                fontSize: size ?? 24,
+                fontSize: size ?? 20,
                 color: Colors.grey[800],
                 fontWeight: fontWeight ?? FontWeight.w500,
               ),

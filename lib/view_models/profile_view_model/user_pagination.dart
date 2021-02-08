@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chateko_purse_admin/models/user/user.dart';
 import 'package:chateko_purse_admin/services/auth_api/auth_api.dart';
 import 'package:chateko_purse_admin/services/users_api/users_api.dart';
@@ -12,6 +14,19 @@ class UsersPagination extends ProfileViewModel {
 
   final scrollController = ScrollController();
 
+  final _controller = StreamController<List<Users>>.broadcast();
+  Stream<List<Users>> get controllerOut =>
+      _controller.stream.asBroadcastStream();
+  StreamSink<List<Users>> get controllerIn => _controller.sink;
+
+  List<Users> filteredUsers = [];
+
+  addUsers(Users user) {
+    users.add(user);
+    controllerIn.add(users);
+    notifyListeners();
+  }
+
   UsersPagination() {
     scrollController.addListener(scrollListener);
     fetchNextUsers();
@@ -19,6 +34,7 @@ class UsersPagination extends ProfileViewModel {
 
   @override
   void dispose() {
+    _controller.close();
     scrollController.dispose();
     super.dispose();
   }
@@ -43,9 +59,16 @@ class UsersPagination extends ProfileViewModel {
 
   bool get hasNext => _hasNext;
 
-  List<Users> get users => usersSnapshot.map((snap) {
-        return Users.fromDoc(snap);
-      }).toList();
+  List<Users> users = [];
+
+  getUsers() {
+    var user = Users();
+    usersSnapshot.forEach((snap) {
+      user = Users.fromDoc(snap);
+      addUsers(user);
+    });
+    print(users.length);
+  }
 
   Future fetchNextUsers() async {
     if (_isFetchingUsers) return;
@@ -59,6 +82,7 @@ class UsersPagination extends ProfileViewModel {
         startAfter: usersSnapshot.isNotEmpty ? usersSnapshot.last : null,
       );
       usersSnapshot.addAll(snap.docs);
+      getUsers();
 
       if (snap.docs.length < documentLimit) _hasNext = false;
       notifyListeners();
@@ -72,10 +96,23 @@ class UsersPagination extends ProfileViewModel {
 
   handleSearch(String query) async {
     final search =
-        await userApi.usersRef.where('email', isLessThanOrEqualTo: query).get();
-    usersSnapshot = search.docs;
+        userApi.usersRef.where('email', isLessThanOrEqualTo: query).snapshots();
+    var user = Users();
+
+    search.map((m) {
+      m.docs.forEach((element) {
+        user = Users.fromDoc(element);
+        users.add(user);
+        filteredUsers = users
+            .where(
+                (u) => (u.fullName.contains(query) || u.email.contains(query)))
+            .toList();
+        print(filteredUsers.length);
+        filteredUsers.forEach((element) {
+          print(element.fullName);
+        });
+      });
+    }).toList();
     notifyListeners();
-    print(search.docs);
-    print(usersSnapshot);
   }
 }

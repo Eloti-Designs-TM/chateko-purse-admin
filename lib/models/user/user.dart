@@ -23,7 +23,6 @@ class Users {
   String accountNumber;
   bool isAdmin;
 
-
   Users(
       {this.activateRefarral,
       this.userID,
@@ -39,6 +38,7 @@ class Users {
       this.password,
       this.accountName,
       this.accountNumber,
+      this.paidFirstInvestment,
       this.bankName,
       this.imageUrl});
 
@@ -60,6 +60,7 @@ class Users {
       serviceValues: data['serviceValue'],
       accountName: data['accountName'],
       accountNumber: data['accountNumber'],
+      paidFirstInvestment: data['paidFirstInvestment'],
       bankName: data['bankName'],
     );
   }

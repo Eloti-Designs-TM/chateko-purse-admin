@@ -80,7 +80,6 @@ class LoginViewModel extends BaseViewModel with AuthViewModel {
               .pushReplacement(MaterialPageRoute(builder: (_) => HomeView()));
           notifyListeners();
         } else {
-
           await showSnackbarFailed(
             context,
             msg:

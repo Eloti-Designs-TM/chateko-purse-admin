@@ -22,6 +22,13 @@ class InvestViewModel with ChangeNotifier {
     }
   }
 
+  Future<void> deleteInvestment(context, Investment invest) async {
+    try {
+      Navigator.of(context).pop();
+      await investApi.deleteInvestment(invest.id);
+    } catch (e) {}
+  }
+
   updateFirstTimeUserStatus(
       {String id, String status, Investment invest, Users user}) async {
     var referral = ReferSystem();
@@ -35,8 +42,6 @@ class InvestViewModel with ChangeNotifier {
         referral = ReferSystem.fromDoc(refDoc);
       }
       if (refDoc.exists) {
-        print(referral.activePayment + 500);
-
         await investApi.referralSystem
             .doc(user.referrarCode)
             .update(referral.toMap(
@@ -65,7 +70,7 @@ class InvestViewModel with ChangeNotifier {
 
   updateStatus(
       {String id, String status, Investment invest, Users user}) async {
-    await investApi.updateInvestmentStatus(id, {
+    await investApi.updateInvestment(id, {
       'status': status,
     });
     if (status == 'active') {
@@ -82,10 +87,9 @@ class InvestViewModel with ChangeNotifier {
 
   updateAmount(BuildContext context, String id) async {
     try {
-      await investApi.updateInvestmentStatus(id, {
+      await investApi.updateInvestment(id, {
         'totalAmount': int.parse(amountController.text),
       });
-    }  catch (e) {
-    }
+    } catch (e) {}
   }
 }

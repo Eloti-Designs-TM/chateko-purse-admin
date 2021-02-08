@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chateko_purse_admin/models/invest/investment.dart';
 import 'package:chateko_purse_admin/services/auth_api/auth_api.dart';
 import 'package:chateko_purse_admin/services/invest_api/invest_api.dart';
@@ -12,13 +14,43 @@ class InvestPagination extends InvestViewModel {
 
   final scrollController = ScrollController();
 
+  final _controller = StreamController<List<Investment>>.broadcast();
+  Stream<List<Investment>> get controllerOut =>
+      _controller.stream.asBroadcastStream();
+  StreamSink<List<Investment>> get controllerIn => _controller.sink;
+
+  List<Investment> filteredInvestment = [];
+  // List<Investment> investments = [];
+
   InvestPagination() {
     scrollController.addListener(scrollListener);
     fetchNextInvestments();
   }
 
+  List<Investment> get investments => _investSnapshot
+      .map(
+        (snap) => Investment.fromDoc(snap),
+      )
+      .toList();
+
+  getInvestment() {
+    var investment = Investment();
+    _investSnapshot.map((snap) {
+      investment = Investment.fromDoc(snap);
+      addUsers(investment);
+    }).toList();
+  }
+
+  addUsers(Investment investment) {
+    investments.add(investment);
+    controllerIn.add(investments);
+    notifyListeners();
+  }
+
   @override
   void dispose() {
+    _controller.close();
+
     scrollController.dispose();
     super.dispose();
   }
@@ -43,9 +75,9 @@ class InvestPagination extends InvestViewModel {
 
   bool get hasNext => _hasNext;
 
-  List<Investment> get investments => _investSnapshot.map((snap) {
-        return Investment.fromDoc(snap);
-      }).toList();
+  // List<Investment> get investments => _investSnapshot.map((snap) {
+  //       return Investment.fromDoc(snap);
+  //     }).toList();
 
   Future fetchNextInvestments() async {
     if (_isFetchingUsers) return;
@@ -59,7 +91,7 @@ class InvestPagination extends InvestViewModel {
         startAfter: _investSnapshot.isNotEmpty ? _investSnapshot.last : null,
       );
       _investSnapshot.addAll(snap.docs);
-
+      getInvestment();
       if (snap.docs.length < documentLimit) _hasNext = false;
       notifyListeners();
     } catch (error) {
@@ -68,5 +100,26 @@ class InvestPagination extends InvestViewModel {
     }
 
     _isFetchingUsers = false;
+  }
+
+  handleSearch(String query) async {
+    final search =
+        investApi.investRef.where('id', isLessThanOrEqualTo: query).snapshots();
+    var user = Investment();
+
+    search.map((m) {
+      m.docs.forEach((element) {
+        user = Investment.fromDoc(element);
+        investments.add(user);
+        filteredInvestment = investments
+            .where((u) => (u.id.contains(query) || u.bankName.contains(query)))
+            .toList();
+        print(filteredInvestment.length);
+        filteredInvestment.forEach((element) {
+          print(element.id);
+        });
+      });
+    }).toList();
+    notifyListeners();
   }
 }

@@ -25,56 +25,151 @@ class _ManageUserPageState extends State<ManageUserPage> {
               child: Stack(
                 children: [
                   Builder(builder: (context) {
-                    Users user = Users();
-                    var users = List<Users>();
-                    userReq.usersSnapshot.map((e) {
-                      user = Users.fromDoc(e);
-                      users.add(user);
-                    }).toSet();
-                    return ListView.separated(
-                        separatorBuilder: (_, i) => Divider(),
-                        controller: userReq.scrollController,
-                        itemCount: userReq.usersSnapshot.length,
-                        itemBuilder: (context, i) {
-                          final kUser = users[i];
-                          return ListTile(
-                            title: Text(
-                              '${kUser.fullName}',
+                    return Column(
+                      children: [
+                        Container(
+                          height: 40,
+                          child: TextFormField(
+                              // controller: userReq.searchController,
                               style: TextStyle(fontSize: 18),
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('${kUser.email}\n${kUser.phone}'),
-                                kUser.isNew == true
-                                    ? Chip(
-                                        padding: const EdgeInsets.all(0),
-                                        label: Text(
-                                          'New',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        backgroundColor: Colors.red,
-                                      )
-                                    : Container(),
-                              ],
-                            ),
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.grey[300],
-                              backgroundImage:
-                                  NetworkImage('${kUser.imageUrl}'),
-                            ),
-                            trailing: Icon(Icons.arrow_forward, size: 14),
-                            onTap: () async {
-                              if (kUser.isNew) {
-                                await userReq.isCardClick(kUser.userID);
-                              }
-                              await showDialog(
-                                context: context,
-                                builder: (ctx) => UserDialog(users: kUser),
-                              );
-                            },
-                          );
-                        });
+                              onFieldSubmitted: userReq.handleSearch,
+                              onChanged: userReq.handleSearch,
+                              decoration: InputDecoration(
+                                filled: true,
+                                hintText: 'Search user',
+                                fillColor: Colors.white,
+                                suffixIcon: InkWell(
+                                    // onTap: () => userReq
+                                    //     .handleSearch(userReq.searchController.text),
+                                    child: Icon(Icons.search)),
+                              )),
+                        ),
+                        Expanded(
+                          child: userReq.filteredUsers.isNotEmpty
+                              ? ListView.separated(
+                                  separatorBuilder: (_, i) => Divider(),
+                                  controller: userReq.scrollController,
+                                  itemCount: userReq.filteredUsers.length,
+                                  itemBuilder: (context, i) {
+                                    final kUser = userReq.filteredUsers[i];
+
+                                    return ListTile(
+                                      title: Text(
+                                        '${kUser.fullName}',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                              '${kUser.email}\n${kUser.phone}'),
+                                          kUser.isNew == true
+                                              ? Chip(
+                                                  padding:
+                                                      const EdgeInsets.all(0),
+                                                  label: Text(
+                                                    'New',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                  backgroundColor: Colors.red,
+                                                )
+                                              : Container(),
+                                        ],
+                                      ),
+                                      leading: CircleAvatar(
+                                        backgroundColor: Colors.grey[300],
+                                        backgroundImage:
+                                            NetworkImage('${kUser.imageUrl}'),
+                                      ),
+                                      trailing:
+                                          Icon(Icons.arrow_forward, size: 14),
+                                      onTap: () async {
+                                        if (kUser.isNew) {
+                                          await userReq
+                                              .isCardClick(kUser.userID);
+                                        }
+                                        await showDialog(
+                                          context: context,
+                                          builder: (ctx) =>
+                                              UserDialog(users: kUser),
+                                        );
+                                      },
+                                    );
+                                  })
+                              : StreamBuilder<List<Users>>(
+                                  stream: userReq.controllerOut,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.data == null) {
+                                      return Center(
+                                          child: Text('Failed to get data'));
+                                    }
+                                    final data = snapshot.data;
+                                    return ListView.separated(
+                                        separatorBuilder: (_, i) => Divider(),
+                                        controller: userReq.scrollController,
+                                        itemCount:
+                                            userReq.filteredUsers.isNotEmpty
+                                                ? userReq.filteredUsers.length
+                                                : data.length,
+                                        itemBuilder: (context, i) {
+                                          final kUser =
+                                              userReq.filteredUsers.isNotEmpty
+                                                  ? userReq.filteredUsers[i]
+                                                  : data[i];
+                                          return ListTile(
+                                            title: Text(
+                                              '${kUser.fullName}',
+                                              style: TextStyle(fontSize: 18),
+                                            ),
+                                            subtitle: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                    '${kUser.email}\n${kUser.phone}'),
+                                                kUser.isNew == true
+                                                    ? Chip(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(0),
+                                                        label: Text(
+                                                          'New',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                        backgroundColor:
+                                                            Colors.red,
+                                                      )
+                                                    : Container(),
+                                              ],
+                                            ),
+                                            leading: CircleAvatar(
+                                              backgroundColor: Colors.grey[300],
+                                              backgroundImage: NetworkImage(
+                                                  '${kUser.imageUrl}'),
+                                            ),
+                                            trailing: Icon(Icons.arrow_forward,
+                                                size: 14),
+                                            onTap: () async {
+                                              if (kUser.isNew) {
+                                                await userReq
+                                                    .isCardClick(kUser.userID);
+                                              }
+                                              await showDialog(
+                                                context: context,
+                                                builder: (ctx) =>
+                                                    UserDialog(users: kUser),
+                                              );
+                                            },
+                                          );
+                                        });
+                                  }),
+                        ),
+                      ],
+                    );
                   }),
                   if (userReq.users.isEmpty || userReq.users == null)
                     Center(
@@ -106,23 +201,23 @@ class _ManageUserPageState extends State<ManageUserPage> {
 //         backgroundColor: Theme.of(context).primaryColor,
 //         title: searchIconEnabled
 //             ? Consumer<UserApi>(builder: (context, userReq, child) {
-//                 return Container(
-//                   height: 40,
-//                   child: TextFormField(
-//                       controller: userReq.searchController,
-//                       style: TextStyle(fontSize: 18),
-//                       onFieldSubmitted: userReq.handleSearch,
-//                       decoration: InputDecoration(
-//                         filled: true,
-//                         hintText: 'Search user',
-//                         fillColor: Colors.white,
-//                         suffixIcon: InkWell(
-//                             onTap: () => userReq
-//                                 .handleSearch(userReq.searchController.text),
-//                             child: Icon(Icons.search)),
-//                       )),
-//                 );
-//               })
+  //   return Container(
+  //     height: 40,
+  //     child: TextFormField(
+  //         controller: userReq.searchController,
+  //         style: TextStyle(fontSize: 18),
+  //         onFieldSubmitted: userReq.handleSearch,
+  //         decoration: InputDecoration(
+  //           filled: true,
+  //           hintText: 'Search user',
+  //           fillColor: Colors.white,
+  //           suffixIcon: InkWell(
+  //               onTap: () => userReq
+  //                   .handleSearch(userReq.searchController.text),
+  //               child: Icon(Icons.search)),
+  //         )),
+  //   );
+  // })
 //             : Text('Manage Users'),
 //         centerTitle: true,
 //         actions: [

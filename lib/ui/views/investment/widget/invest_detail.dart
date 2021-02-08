@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chateko_purse_admin/services/url_api/url_api.dart';
 import 'package:chateko_purse_admin/ui/utils/number_to_currency_format.dart';
@@ -45,6 +44,30 @@ class InvestmentDetails extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            FlatButton(
+                              child: Text('Delete Investement'),
+                              color: Colors.pink,
+                              textColor: Colors.white,
+                              onPressed: () async {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => CustomAlertDialog(
+                                    title: 'Delete Investment?',
+                                    content:
+                                        'Are you sure, you want to delete this investment?',
+                                    onTapYes: () async {
+                                      Navigator.of(context).pop();
+                                      model.deleteInvestment(context, invest);
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                         Text(
                           'INVESTOR DETAILS',
                           style: TextStyle(
@@ -294,7 +317,11 @@ class InvestStatusButtons extends StatelessWidget {
         FlatButton(
           shape: StadiumBorder(),
           onPressed: () {
-            askToUpdate(context, title: 'Set to Pending', content: 'Are your sure you want to set this status to pending?', onTapYes: () {
+            askToUpdate(context,
+                title: 'Set to Pending',
+                content:
+                    'Are your sure you want to set this status to pending?',
+                onTapYes: () {
               model.updateStatus(
                   id: invest.id, status: 'pending', invest: invest);
             });
@@ -311,7 +338,10 @@ class InvestStatusButtons extends StatelessWidget {
         FlatButton(
           shape: StadiumBorder(),
           onPressed: () {
-            askToUpdate(context, title: 'Set to Active', content: 'Are your sure you want to set this status to active?', onTapYes: () {
+            askToUpdate(context,
+                title: 'Set to Active',
+                content: 'Are your sure you want to set this status to active?',
+                onTapYes: () {
               model.updateStatus(
                   id: invest.id, user: user, status: 'active', invest: invest);
             });
@@ -328,7 +358,11 @@ class InvestStatusButtons extends StatelessWidget {
         FlatButton(
           shape: StadiumBorder(),
           onPressed: () {
-            askToUpdate(context, title: 'Set to Expired', content: 'Are your sure you want to set this status to expired?', onTapYes: () {
+            askToUpdate(context,
+                title: 'Set to Expired',
+                content:
+                    'Are your sure you want to set this status to expired?',
+                onTapYes: () {
               model.updateStatus(
                   id: invest.id, status: 'expired', invest: invest);
             });
@@ -347,7 +381,7 @@ class InvestStatusButtons extends StatelessWidget {
       builder: (_) => CustomAlertDialog(
         title: title,
         content: content,
-        onTapYes: (){
+        onTapYes: () {
           onTapYes();
           Navigator.of(context).pop();
         },

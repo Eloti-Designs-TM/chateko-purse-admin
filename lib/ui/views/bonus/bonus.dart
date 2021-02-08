@@ -18,7 +18,7 @@ class BonusPage extends StatelessWidget {
             child: Consumer2<BonusPagination, UserApi>(
                 builder: (_, bonusApi, userApi, child) => bonusApi
                         .bonuses.isEmpty
-                    ? Center(child: CircularProgressIndicator())
+                    ? Center(child: Text('No Bonus Request Found'))
                     : RefreshIndicator(
                         onRefresh: () {
                           return bonusApi.fetchNextBonuses();
@@ -81,7 +81,6 @@ class BonusPage extends StatelessWidget {
                                                   : Colors.red)),
                                       onTap: () async {
                                         if (!kBonus.isRead) {
-                                          print('runig');
                                           await bonusApi
                                               .isCardClick(kBonus.referId);
                                         }

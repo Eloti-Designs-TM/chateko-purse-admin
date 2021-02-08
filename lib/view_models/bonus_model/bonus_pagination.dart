@@ -1,4 +1,5 @@
 import 'package:chateko_purse_admin/models/invest/bonus.dart';
+import 'package:chateko_purse_admin/models/user/user.dart';
 import 'package:chateko_purse_admin/services/auth_api/auth_api.dart';
 import 'package:chateko_purse_admin/services/bonus_api.dart/bonus_api.dart';
 import 'package:chateko_purse_admin/ui/views/widget/snacks.dart';
@@ -76,10 +77,20 @@ class BonusPagination extends ChangeNotifier {
     });
   }
 
-  updateStatus(context, String id, String status) async {
+  updateStatus(context, String id, String status, Users user) async {
     await bonusApi.bonusRef.doc(id).update({
       'status': status,
     });
+    if (status != 'pending') {
+      await authApi.referRef.doc(user.referralCode).update({
+        'activePayment': 0,
+      });
+    }
     showSnackbarSuccess(context, msg: 'Updated Bonus Request status');
+  }
+
+  deleteBonus(context, String id) async {
+    await bonusApi.bonusRef.doc(id).delete();
+    showSnackbarSuccess(context, msg: 'Deleted Bonus Request');
   }
 }

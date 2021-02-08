@@ -45,8 +45,12 @@ class InvestApi with ChangeNotifier {
     yield* investRef.where('userID', isEqualTo: userID).snapshots();
   }
 
-  updateInvestmentStatus(String id, Map<String, dynamic> doc) async {
+  updateInvestment(String id, Map<String, dynamic> doc) async {
     await investRef.doc(id).update(doc);
+  }
+
+  Future<void> deleteInvestment(String id) async {
+    await investRef.doc(id).delete();
   }
 
   Future<QuerySnapshot> getInvest(
